@@ -1,0 +1,143 @@
+:root {
+  --sm-panel: #dfe9ee;
+  --sm-ink: #2b3a42;
+  --sm-dot: #c4d3db;
+  --sm-canvas: #f7fafb;
+}
+
+/* Editor */
+.sm-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.sm-editor-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  background: var(--sm-panel);
+  color: var(--sm-ink);
+}
+.sm-editor-header .form-group,
+.sm-editor-header .form-check {
+  margin: 0;
+}
+.sm-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  margin-right: auto;
+}
+.sm-docs {
+  color: var(--sm-ink);
+  text-decoration: none;
+}
+.sm-editor > .shiny-input-container {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+}
+.sm-editor textarea {
+  height: 100% !important;
+  resize: none;
+  border: 0;
+  border-radius: 0;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre;
+  tab-size: 4;
+}
+.sm-editor textarea:focus {
+  box-shadow: none;
+}
+
+/* Viewer */
+.sm-viewer {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  background-color: var(--sm-canvas);
+  background-image: radial-gradient(var(--sm-dot) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.sm-canvas,
+.sm-stage {
+  position: absolute;
+  inset: 0;
+}
+.sm-stage svg {
+  max-width: none !important;
+}
+.sm-error {
+  position: absolute;
+  left: 1rem;
+  right: 5rem;
+  bottom: 1rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.4rem;
+  background: #fdecea;
+  color: #8a1c13;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+}
+.sm-toolbar {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  display: flex;
+  gap: 0.5rem;
+}
+.sm-toolbar .form-group {
+  margin: 0;
+}
+.sm-toolbar select {
+  background-color: var(--sm-panel);
+  border: 0;
+  color: var(--sm-ink);
+}
+.sm-tools {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.4rem;
+  border: 1px solid var(--sm-panel);
+  border-radius: 0.6rem;
+  background: #fff;
+}
+.sm-tool {
+  width: 2.6rem;
+  height: 2.4rem;
+  border: 0;
+  border-radius: 0.4rem;
+  background: transparent;
+  color: var(--sm-ink);
+  font-weight: 600;
+}
+.sm-tool:hover {
+  background: var(--sm-panel);
+}
+
+/* Let the editor fill the sidebar */
+.bslib-sidebar-layout > .sidebar > .sidebar-content:has(.sm-editor) {
+  height: 100% !important;
+  flex: 1 1 auto;
+  padding: 0;
+}
+.sm-title,
+.sm-editor-header label {
+  white-space: nowrap;
+}
+.sm-editor > .shiny-input-container > textarea {
+  min-height: 100%;
+}
