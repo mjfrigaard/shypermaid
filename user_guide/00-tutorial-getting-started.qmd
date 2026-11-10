@@ -25,7 +25,7 @@ The install adds a `shymermaid` command to the environment. Run it with `uv`:
 uv run shymermaid
 ```
 
-The command starts a server on `127.0.0.1:8000` and opens the app in a browser. The app loads Mermaid and svg-pan-zoom from jsdelivr, so it needs an internet connection.
+The command starts a server on `127.0.0.1:8000` and opens the app in a browser. The app ships its own copies of Mermaid, svg-pan-zoom, and the ELK layout plugin, so it works without an internet connection.
 
 We can confirm the app is working by looking at the canvas. The sample flowchart from the editor should be drawn on the right side of the page.
 

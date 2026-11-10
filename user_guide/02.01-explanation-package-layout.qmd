@@ -29,7 +29,7 @@ flowchart TD
         cfg[["<code>render_config()</code>"]]
         consts[("<code>THEMES</code>, <code>LOOKS</code>,<br><code>DIRECTIONS</code>, <code>DEFAULT_CODE</code>")]
     end
-    www[("<code>www/</code><br>binding and styles")]
+    www[("<code>www/</code><br>binding, styles, libraries")]
 
     run --> create --> appui & srv
     create -.-> www
@@ -59,7 +59,7 @@ The same split keeps the menu choices in one place. `THEMES`, `LOOKS`, and `DIRE
 
 ## Why the drawing happens in the browser
 
-Mermaid is a JavaScript library, so the diagram is drawn in the browser, not in Python. The files in `www/` handle that side. `mermaid-binding.js` receives the code from the server, draws it, and runs the pan, zoom, fullscreen, and download tools. `styles.css` lays out the editor and canvas.
+Mermaid is a JavaScript library, so the diagram is drawn in the browser, not in Python. The files in `www/` handle that side. `mermaid-binding.js` receives the code from the server, draws it, and runs the pan, zoom, fullscreen, and download tools. `styles.css` lays out the editor and canvas. `vendor/` holds pinned copies of Mermaid, svg-pan-zoom, and the ELK layout plugin, so the app never reaches out to a CDN.
 
 `create_app()` serves `www/` at `/shymermaid` through the `static_assets` argument. The folder ships inside the package, so the paths work after a regular install as well as an editable one.
 

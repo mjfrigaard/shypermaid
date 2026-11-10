@@ -55,7 +55,7 @@ def test_back_to_dagre_after_elk(viewer: Page):
 
 
 def test_elk_load_failure_shows_error(viewer: Page):
-    viewer.route("**/layout-elk@*/**", lambda route: route.abort())
+    viewer.route("**/vendor/layout-elk/**", lambda route: route.abort())
     viewer.locator("#viewer-layout").select_option("elk")
     expect(viewer.locator(".sm-error")).to_contain_text("Could not load the ELK layout")
     expect(viewer.locator(".sm-stage svg")).to_be_visible()

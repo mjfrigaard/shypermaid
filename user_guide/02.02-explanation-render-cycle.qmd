@@ -66,7 +66,7 @@ flowchart TD
     style err fill:#fdecea,color:#8a1c13,rx:5,ry:5
 ```
 
-The top box runs in `viewer_server()` and the bottom box runs in `mermaid-binding.js`. The message carries three things: the namespaced canvas id, the code after `set_direction()`, and the options from `render_config()`. When the options ask for the ELK layout, the binding first imports the `@mermaid-js/layout-elk` plugin (once per page) and registers it with Mermaid. The id lets two viewers on one page draw into their own canvases.
+The top box runs in `viewer_server()` and the bottom box runs in `mermaid-binding.js`. The message carries three things: the namespaced canvas id, the code after `set_direction()`, and the options from `render_config()`. When the options ask for the ELK layout, the binding first imports the `@mermaid-js/layout-elk` plugin from `www/vendor/` (once per page) and registers it with Mermaid. The id lets two viewers on one page draw into their own canvases.
 
 ## Why errors keep the last diagram
 

@@ -42,7 +42,11 @@ from shymermaid import run_app
 run_app(port=8000)
 ```
 
-The app loads Mermaid and svg-pan-zoom from jsdelivr, so it needs an internet connection.
+The app ships its own copies of Mermaid, svg-pan-zoom, and the ELK layout plugin, so it works without an internet connection.
+
+## Desktop app
+
+shymermaid also ships as a desktop app (`.dmg`, `.exe`, `.AppImage`) built with [shinyelectron](https://r-pkg.thecoatlessprofessor.com/shinyelectron/). Download an installer from the GitHub releases, or build one yourself; see [Build the Desktop App](https://mjfrigaard.github.io/shymermaid/user-guide/01.02-how-to-desktop-app.html).
 
 ## Use the modules in another app
 
@@ -64,7 +68,7 @@ def server(input, output, session):
 app = App(app_ui, server)
 ```
 
-The page also needs the Mermaid, svg-pan-zoom, and `www/` assets that `shymermaid.app.app_ui()` adds to the page head.
+The page also needs the scripts and stylesheet that `shymermaid.app.app_ui()` adds to the page head, and `www/` served at `/shymermaid` (see [Embed the Modules](https://mjfrigaard.github.io/shymermaid/user-guide/01.01-how-to-embed-modules.html)).
 
 ## Develop
 
@@ -98,7 +102,8 @@ src/shymermaid/
 ├── app.py          # app_ui(), server(), create_app(), run_app()
 └── www/
     ├── mermaid-binding.js
-    └── styles.css
+    ├── styles.css
+    └── vendor/     # Mermaid, svg-pan-zoom, layout-elk
 tests/
 ├── test_app.py
 └── test_diagram.py

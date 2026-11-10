@@ -25,6 +25,15 @@ def test_static_assets_exist():
     assert (WWW / "styles.css").is_file()
 
 
+def test_vendored_libraries_exist():
+    from shymermaid.app import MERMAID_JS, PANZOOM_JS
+
+    for src in (MERMAID_JS, PANZOOM_JS):
+        assert not src.startswith("http")
+        assert (WWW / src.removeprefix("shymermaid/")).is_file()
+    assert (WWW / "vendor/layout-elk/mermaid-layout-elk.esm.min.mjs").is_file()
+
+
 def test_editor_has_highlight_layer():
     html = str(app_ui())
     assert 'class="sm-highlight"' in html

@@ -11,3 +11,5 @@ build/
 .DS_Store
 great-docs/
 _freeze/
+electron/dist/
+electron/app/shymermaid/

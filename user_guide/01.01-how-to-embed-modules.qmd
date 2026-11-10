@@ -39,7 +39,7 @@ The dotted lines pair each UI function with its server function through a shared
 
 ## Add the page assets
 
-The viewer draws nothing on its own. The browser needs Mermaid, svg-pan-zoom, and the package's JavaScript binding, and the page needs the package stylesheet. The app below adds all four to the page head and serves the package's `www/` folder at `/shymermaid`:
+The viewer draws nothing on its own. The browser needs Mermaid, svg-pan-zoom, and the package's JavaScript binding, and the page needs the package stylesheet. All four ship in the package's `www/` folder (the libraries are in `www/vendor/`), so the app works offline. The app below adds them to the page head and serves `www/` at `/shymermaid`:
 
 ```python
 from pathlib import Path
@@ -50,8 +50,8 @@ from shiny import App, ui
 from shymermaid import editor_server, editor_ui, viewer_server, viewer_ui
 
 WWW = Path(shymermaid.__file__).parent / "www"
-MERMAID_JS = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"
-PANZOOM_JS = "https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"
+MERMAID_JS = "shymermaid/vendor/mermaid.min.js"
+PANZOOM_JS = "shymermaid/vendor/svg-pan-zoom.min.js"
 
 app_ui = ui.page_fillable(
     ui.head_content(
@@ -75,7 +75,7 @@ app = App(app_ui, server, static_assets={"/shymermaid": WWW})
 The script order matters. Mermaid and svg-pan-zoom must load before `mermaid-binding.js`, because the binding calls both libraries when the first diagram arrives.
 
 ::: {.callout-warning}
-Without the `static_assets` argument, the stylesheet and binding return 404 errors. The page still loads, but the canvas stays empty and no error appears in the app.
+Without the `static_assets` argument, the libraries, stylesheet, and binding return 404 errors. The page still loads, but the canvas stays empty and no error appears in the app.
 :::
 
 ## Use your own code source

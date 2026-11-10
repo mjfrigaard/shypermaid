@@ -23,6 +23,41 @@ uv run playwright install chromium
 
 `pytest` prints a coverage table after the tests. The browser tests run the app in a separate process, so they don't count toward coverage. The server tests in `tests/test_modules_server.py` do count: they run `editor_server()` and `viewer_server()` in memory with `shiny.testserver.test_server()` and record the render messages the viewer sends. `mypy` runs in strict mode, so every function in `src/` needs type hints.
 
+## Update the vendored libraries
+
+The app serves its JavaScript libraries from `src/shymermaid/www/vendor/` instead of a CDN, so it runs offline and inside a desktop app:
+
+| File | Package | Version |
+|---|---|---|
+| `mermaid.min.js` | `mermaid` | 11.4.1 |
+| `svg-pan-zoom.min.js` | `svg-pan-zoom` | 3.6.2 |
+| `layout-elk/` (entry file and two chunks) | `@mermaid-js/layout-elk` | 0.1.7 |
+
+To change a version, edit it in the commands below, download the files again, and run the tests:
+
+```bash
+V=src/shymermaid/www/vendor
+NPM=https://cdn.jsdelivr.net/npm
+curl -fsSL -o $V/mermaid.min.js $NPM/mermaid@11.4.1/dist/mermaid.min.js
+curl -fsSL -o $V/svg-pan-zoom.min.js $NPM/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js
+ELK=$NPM/@mermaid-js/layout-elk@0.1.7/dist
+for f in mermaid-layout-elk.esm.min.mjs \
+         chunks/mermaid-layout-elk.esm.min/chunk-SP2CHFBE.mjs \
+         chunks/mermaid-layout-elk.esm.min/render-GJFLM4CZ.mjs; do
+  curl -fsSL --create-dirs -o $V/layout-elk/$f $ELK/$f
+done
+```
+
+The chunk names change between ELK releases. List them for a new version with `curl -s https://data.jsdelivr.com/v1/package/npm/@mermaid-js/layout-elk@VERSION/flat`.
+
+Then update the version table here and in `www/vendor/README.md`, and the paths in `app.py` and `mermaid-binding.js` if the file names changed.
+
+::: {.callout-warning}
+Mermaid and the ELK plugin must be upgraded together. `layout-elk` 0.2.3 fails on Mermaid 11.4.1 with `Ge.default.extend is not a function`; 0.1.7 was released alongside 11.4.1 and works. `tests/test_layout.py` catches a mismatch.
+:::
+
+The browser loads the ELK files as ES modules, which must be served as JavaScript. Older Python versions on some systems don't know the `.mjs` extension, so `app.py` registers it with `mimetypes` before the app starts.
+
 ## Build the docs
 
 The site is built with [great-docs](https://posit-dev.github.io/great-docs/), which lives in the `docs` dependency group (Python 3.11 or later). The settings live in `great-docs.yml`, and the guide pages live in `user_guide/`. Install the group, build the site, then preview it in a browser:

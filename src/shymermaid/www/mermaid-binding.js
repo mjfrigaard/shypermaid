@@ -11,10 +11,13 @@
     s.pz.center();
   }
 
-  // ELK layouts are an ES module plugin, loaded the first time one is used.
-  // layout-elk 0.1.7 matches mermaid 11.4.1; newer releases need mermaid 11.x+.
-  var ELK_URL =
-    "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.7/dist/mermaid-layout-elk.esm.min.mjs";
+  // ELK layouts are an ES module plugin in vendor/, loaded the first time one
+  // is used. layout-elk 0.1.7 matches mermaid 11.4.1; upgrade them together.
+  // Resolved against this script's URL so it works wherever www/ is served.
+  var ELK_URL = new URL(
+    "vendor/layout-elk/mermaid-layout-elk.esm.min.mjs",
+    document.currentScript.src
+  ).href;
   var elkReady = null;
 
   function loadLayout(layout) {

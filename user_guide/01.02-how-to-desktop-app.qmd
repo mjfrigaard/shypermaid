@@ -1,0 +1,105 @@
+---
+title: "Build the Desktop App"
+guide-section: "How-To"
+---
+
+shymermaid also runs as a desktop app: a window of its own, no terminal, and no internet connection. The installers are built with [shinyelectron](https://r-pkg.thecoatlessprofessor.com/shinyelectron/), an R package that wraps a Shiny app in Electron. This guide shows how to install a release, build an installer on your own machine, and publish installers for every operating system.
+
+## Install a release
+
+Each release on GitHub has one installer per operating system. Download the file for yours:
+
+| System | File |
+|---|---|
+| macOS (Apple silicon or Intel) | `.dmg` |
+| Windows | `.exe` |
+| Linux | `.AppImage` |
+
+The installers ship their own copy of Python, so you don't need Python, R, or Node installed. The app opens in its own window with the same editor and canvas as the browser version, with two differences:
+
+* SVG and PNG open a Save dialog, so you choose where the file goes.
+* Docs opens the Mermaid syntax reference in a second app window. That page is on the web, so it's the one part of the app that needs an internet connection.
+
+::: {.callout-note}
+The installers are not signed yet, so the operating system warns you the first time you open the app. On macOS, right click the app and choose Open (or click Open Anyway under System Settings, Privacy & Security). On Windows, click More info, then Run anyway. On Linux, make the file executable with `chmod +x` and run it.
+:::
+
+## How the build works
+
+shinyelectron builds from an app folder that holds an `app.py`, not from a Python package. The `electron/` folder bridges the two: a script copies the package into `electron/app/`, next to a one line `app.py` that imports `shymermaid.app.app`. shinyelectron then bundles that folder with Python and Electron into an installer.
+
+```{mermaid}
+%%| eval: true
+%%{init: {'theme': 'base', 'themeVariables': { 'fontFamily': 'monospace', "fontSize":"18px", "darkMode":false}}}%%
+
+flowchart TD
+    pkg[("<code>src/shymermaid/</code>")]
+    scaffold("<code>scaffold_py.py</code>")
+    subgraph App["<strong>electron/app/</strong>"]
+        launcher("<code>app.py</code>")
+        copy[("<code>shymermaid/</code>")]
+        yml("<code>_shinyelectron.yml</code>")
+    end
+    export("<code>export()</code>")
+    inst(["Installer"])
+
+    pkg --> scaffold --> App
+    App --> export --> inst
+
+    style App fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
+    style scaffold fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style export fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style launcher fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style yml fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style inst fill:#4CBB9D,color:#FFFFFF
+```
+
+The files in `electron/` have three jobs:
+
+* `electron/app/app.py` and `requirements.txt`: the launcher and the Python packages the app installs.
+* `electron/app/_shinyelectron.yml`: the app name, the version (copied from `pyproject.toml`), and the runtime strategy.
+* `electron/build.R`: checks the app folder with `app_check()` and builds the installer with `export()`.
+
+The copied package in `electron/app/shymermaid/` and the build output in `electron/dist/` are listed in `.gitignore`. The copy is refreshed before every build, so the package source stays the only place to edit.
+
+The app uses the `bundled` strategy: the installer carries a portable Python, so it works offline on a machine with nothing installed. This is also why the JavaScript libraries ship inside the package (see [Checks and Docs](04.00-dev-checks-and-docs.qmd)).
+
+## Build an installer locally
+
+The build machine needs R 4.4 or later with shinyelectron, and Node 22 or later. Check them from R:
+
+```r
+install.packages("shinyelectron")
+shinyelectron::sitrep_shinyelectron()
+shinyelectron::install_nodejs()   # if Node is missing or too old
+```
+
+From the package root, refresh `electron/app/`, then build:
+
+```bash
+uv run python tools/scaffold_py.py --strategy=bundled --module=shymermaid.app
+Rscript electron/build.R
+```
+
+The installer for your system lands in `electron/dist/electron-app/dist/`. Run `source("electron/build.R")` from an interactive R session instead to open the app as soon as the build finishes.
+
+::: {.callout-tip}
+If the packaged app opens to a blank window, launch it with the `SHINYELECTRON_DEBUG=1` environment variable set. The log shows how it found Python, which packages it installed, and whether the Shiny server started.
+:::
+
+A build only makes installers for the system it runs on. macOS installers need a Mac, and the `bundled` strategy can't build for another system.
+
+## Publish installers for every system
+
+`.github/workflows/build-installers.yml` builds all four installers (macOS Apple silicon, macOS Intel, Windows, and Linux) on GitHub's runners. It runs when you push a version tag, and attaches the installers to a GitHub release for that tag:
+
+```bash
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+Use the version from `pyproject.toml` for the tag. You can also start the workflow by hand from the Actions tab, which builds the installers without making a release.
+
+## Recap
+
+The desktop app is the same package in an Electron window. `tools/scaffold_py.py` copies the package into `electron/app/`, `electron/build.R` turns that folder into an installer, and a version tag builds installers for every system on GitHub.

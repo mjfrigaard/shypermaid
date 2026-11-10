@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import mimetypes
 from pathlib import Path
 
 from shiny import App, Inputs, Outputs, Session, ui
@@ -11,8 +12,12 @@ from .modules import editor_server, editor_ui, viewer_server, viewer_ui
 
 WWW = Path(__file__).parent / "www"
 
-MERMAID_JS = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"
-PANZOOM_JS = "https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"
+MERMAID_JS = "shymermaid/vendor/mermaid.min.js"
+PANZOOM_JS = "shymermaid/vendor/svg-pan-zoom.min.js"
+
+# The ELK layout plugin loads as ES modules (.mjs); some Python builds don't
+# map that extension, and browsers refuse modules served as text/plain.
+mimetypes.add_type("text/javascript", ".mjs")
 
 
 def app_ui() -> ui.Tag:

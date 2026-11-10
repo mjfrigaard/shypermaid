@@ -26,8 +26,12 @@ shymermaid = "shymermaid.app:run_app"
 [tool.hatch.build.targets.wheel]
 packages = ["src/shymermaid"]
 
+[tool.hatch.build.targets.sdist]
+exclude = ["electron", "tools"]
+
 [tool.ruff]
 src = ["src"]
+extend-exclude = ["electron", "tools"]
 line-length = 88
 
 [tool.ruff.lint]
