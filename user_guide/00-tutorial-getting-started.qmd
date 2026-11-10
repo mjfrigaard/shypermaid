@@ -9,10 +9,7 @@ This tutorial walks through installing `shymermaid`, launching the app, and draw
 
 `shymermaid` uses [`uv`](https://docs.astral.sh/uv/) for package management. Clone the repo, then run `uv sync` to create the environment and install the package with its development tools:
 
-```{bash}
-#| eval: false
-#| code-fold: false
-#| echo: true
+```bash
 git clone https://github.com/mjfrigaard/shymermaid.git
 cd shymermaid
 uv sync
@@ -24,16 +21,15 @@ uv sync
 
 The install adds a `shymermaid` command to the environment. Run it with `uv`:
 
-```{bash}
-#| eval: false
-#| code-fold: false
-#| echo: true
+```bash
 uv run shymermaid
 ```
 
 The command starts a server on `127.0.0.1:8000` and opens the app in a browser. The app loads Mermaid and svg-pan-zoom from jsdelivr, so it needs an internet connection.
 
 We can confirm the app is working by looking at the canvas. The sample flowchart from the editor should be drawn on the right side of the page.
+
+![The app on launch: the editor on the left and the diagram on the right.](../assets/app.png)
 
 ## Edit the diagram
 
@@ -48,6 +44,8 @@ flowchart TD
 
 Now break the code on purpose by deleting the closing `)` on the first node. A red error message appears at the bottom of the canvas, and the last good diagram stays in place. Put the `)` back and the error goes away.
 
+![A parse error shows at the bottom of the canvas while the last good diagram stays in place.](../assets/error.png)
+
 ::: {.callout-tip}
 Turn off Auto-Update when you're writing a long diagram. The canvas only redraws when you click Render, so half finished lines won't flash errors while you type.
 :::
@@ -57,6 +55,8 @@ Turn off Auto-Update when you're writing a long diagram. The canvas only redraws
 The menus at the top right of the canvas change the drawing without changing your code. Theme picks the color scheme, and Look switches between the classic style and a hand drawn style. Layout picks the engine that places the nodes: Dagre is the default, and ELK draws right angled edges and often untangles diagrams with many crossing links. The first time you pick ELK, the app downloads the layout plugin, so the redraw takes a moment.
 
 Direction rewrites your code's direction before it is drawn. Pick Left to right and the flowchart turns on its side. Pick As written to go back to the direction in your code.
+
+![The same flowchart with the Forest theme, the Hand drawn look, and Left to right direction.](../assets/menus.png)
 
 Direction works on four diagram types, and each one sets it in its own way:
 

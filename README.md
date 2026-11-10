@@ -2,6 +2,8 @@
 
 A Shiny for Python (Core) app-package that renders Mermaid diagrams. Write Mermaid code in the left pane and the diagram updates on the canvas to the right.
 
+![The shymermaid editor and canvas](assets/app.png)
+
 ## Features
 
 - Code editor with Mermaid syntax highlighting in a collapsible sidebar, with an Auto-Update switch and a Render button

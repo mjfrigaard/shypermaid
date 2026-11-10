@@ -9,10 +9,7 @@ This page lists the commands that check the package and build this site. Run the
 
 The tests, linter, and type checker come from the `dev` dependency group, which `uv sync` installs by default. Run them through `uv`:
 
-```{bash}
-#| eval: false
-#| code-fold: false
-#| echo: true
+```bash
 uv run pytest
 uv run ruff check src tests
 uv run mypy src
@@ -20,10 +17,7 @@ uv run mypy src
 
 The editor tests in `tests/test_editor_highlight.py` run the app and drive a headless browser with [Playwright](https://playwright.dev/python/). Install its Chromium once before the first run:
 
-```{bash}
-#| eval: false
-#| code-fold: false
-#| echo: true
+```bash
 uv run playwright install chromium
 ```
 
@@ -33,10 +27,7 @@ uv run playwright install chromium
 
 The site is built with [great-docs](https://posit-dev.github.io/great-docs/), which lives in the `docs` dependency group (Python 3.11 or later). The settings live in `great-docs.yml`, and the guide pages live in `user_guide/`. Install the group, build the site, then preview it in a browser:
 
-```{bash}
-#| eval: false
-#| code-fold: false
-#| echo: true
+```bash
 uv sync --group docs
 uv run great-docs build
 uv run great-docs preview
