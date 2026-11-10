@@ -27,7 +27,7 @@ The editor tests in `tests/test_editor_highlight.py` run the app and drive a hea
 uv run playwright install chromium
 ```
 
-`pytest` prints a coverage table after the tests. The browser tests run the app in a separate process, so they don't count toward coverage. `mypy` runs in strict mode, so every function in `src/` needs type hints.
+`pytest` prints a coverage table after the tests. The browser tests run the app in a separate process, so they don't count toward coverage. The server tests in `tests/test_modules_server.py` do count: they run `editor_server()` and `viewer_server()` in memory with `shiny.testserver.test_server()` and record the render messages the viewer sends. `mypy` runs in strict mode, so every function in `src/` needs type hints.
 
 ## Build the docs
 
@@ -49,3 +49,5 @@ Diagrams on these pages must use a `{mermaid}` cell, not a plain mermaid fence. 
 :::
 
 The build writes to `great-docs/`, which is listed in `.gitignore`.
+
+A push to `main` runs `.github/workflows/docs.yml`, which builds the site and publishes it to GitHub Pages.
