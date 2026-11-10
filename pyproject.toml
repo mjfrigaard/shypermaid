@@ -4,14 +4,21 @@ build-backend = "hatchling.build"
 
 [project]
 name = "shymermaid"
-version = "0.1.0"
+version = "0.2.0"
 description = "Shiny for Python app-package that renders Mermaid diagrams"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["shiny>=1.2.0"]
 
-[project.optional-dependencies]
-dev = ["pytest", "pytest-cov", "mypy", "ruff"]
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "mypy",
+    "ruff",
+    "pytest-playwright>=0.10.0",
+]
+docs = ["great-docs; python_version >= '3.11'"]
 
 [project.scripts]
 shymermaid = "shymermaid.app:run_app"

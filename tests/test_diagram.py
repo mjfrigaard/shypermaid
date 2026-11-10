@@ -37,7 +37,94 @@ def test_render_config():
     assert cfg["startOnLoad"] is False
 
 
-@pytest.mark.parametrize("theme,look", [("nope", "classic"), ("dark", "nope")])
-def test_render_config_invalid(theme, look):
+def test_render_config_layout():
+    assert render_config("dark", "classic")["layout"] == "dagre"
+    assert render_config("dark", "classic", "elk")["layout"] == "elk"
+
+
+@pytest.mark.parametrize(
+    "theme,look,layout",
+    [
+        ("nope", "classic", "dagre"),
+        ("dark", "nope", "dagre"),
+        ("dark", "classic", "nope"),
+    ],
+)
+def test_render_config_invalid(theme, look, layout):
     with pytest.raises(ValueError):
-        render_config(theme, look)
+        render_config(theme, look, layout)
+
+
+def test_set_direction_flowchart_elk_header():
+    assert set_direction("flowchart-elk TD\n  a --> b", "LR") == (
+        "flowchart-elk LR\n  a --> b"
+    )
+
+
+def test_set_direction_only_touches_declaration_line():
+    code = "stateDiagram-v2\n    graph --> x"
+    assert (
+        set_direction(code, "LR")
+        == "stateDiagram-v2\n    direction LR\n    graph --> x"
+    )
+    flow = "flowchart TD\n  graph --> b"
+    assert set_direction(flow, "LR") == "flowchart LR\n  graph --> b"
+
+
+def test_set_direction_skips_comments_and_frontmatter():
+    code = "---\ntitle: x\n---\n%% note\n%%{init: {}}%%\n\ngraph TD\n  a --> b"
+    out = set_direction(code, "RL")
+    assert out.splitlines()[6] == "graph RL"
+    assert out.startswith("---\ntitle: x\n---\n%% note\n%%{init: {}}%%\n")
+
+
+def test_set_direction_keeps_header_suffix():
+    assert set_direction("graph TD;\n  a-->b", "BT") == "graph BT;\n  a-->b"
+
+
+@pytest.mark.parametrize("kind", ["stateDiagram", "stateDiagram-v2", "classDiagram"])
+def test_set_direction_adds_statement(kind):
+    code = f"{kind}\n  A --> B"
+    assert set_direction(code, "LR") == f"{kind}\n  direction LR\n  A --> B"
+
+
+def test_set_direction_replaces_top_level_statement_only():
+    code = (
+        "stateDiagram-v2\n"
+        "  state Outer {\n"
+        "    direction LR\n"
+        "    a --> b\n"
+        "  }\n"
+        "  direction TB\n"
+        "  [*] --> Outer"
+    )
+    out = set_direction(code, "RL")
+    assert "    direction LR\n" in out
+    assert "  direction RL\n" in out
+    assert "direction TB" not in out
+
+
+def test_set_direction_statement_writes_td_as_tb():
+    assert set_direction("classDiagram\n  direction LR\n  A <|-- B", "TD") == (
+        "classDiagram\n  direction TB\n  A <|-- B"
+    )
+
+
+@pytest.mark.parametrize(
+    "code,direction,expected",
+    [
+        ("gitGraph\n  commit", "LR", "gitGraph LR:\n  commit"),
+        ("gitGraph LR:\n  commit", "TD", "gitGraph TB:\n  commit"),
+        ("gitGraph TB:\n  commit", "BT", "gitGraph BT:\n  commit"),
+        ("gitGraph LR:\n  commit", "RL", "gitGraph LR:\n  commit"),
+    ],
+)
+def test_set_direction_gitgraph(code, direction, expected):
+    assert set_direction(code, direction) == expected
+
+
+@pytest.mark.parametrize(
+    "code", ["erDiagram\n  A ||--o{ B : has", 'pie\n  "a": 1', "", "%% only"]
+)
+def test_set_direction_unsupported_unchanged(code):
+    assert set_direction(code, "LR") == code

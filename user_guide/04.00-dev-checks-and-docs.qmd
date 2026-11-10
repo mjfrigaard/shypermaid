@@ -1,0 +1,51 @@
+---
+title: "Checks and Docs"
+guide-section: "Development"
+---
+
+This page lists the commands that check the package and build this site. Run the checks before each commit.
+
+## Run the checks
+
+The tests, linter, and type checker come from the `dev` dependency group, which `uv sync` installs by default. Run them through `uv`:
+
+```{bash}
+#| eval: false
+#| code-fold: false
+#| echo: true
+uv run pytest
+uv run ruff check src tests
+uv run mypy src
+```
+
+The editor tests in `tests/test_editor_highlight.py` run the app and drive a headless browser with [Playwright](https://playwright.dev/python/). Install its Chromium once before the first run:
+
+```{bash}
+#| eval: false
+#| code-fold: false
+#| echo: true
+uv run playwright install chromium
+```
+
+`pytest` prints a coverage table after the tests. The browser tests run the app in a separate process, so they don't count toward coverage. `mypy` runs in strict mode, so every function in `src/` needs type hints.
+
+## Build the docs
+
+The site is built with [great-docs](https://posit-dev.github.io/great-docs/), which lives in the `docs` dependency group (Python 3.11 or later). The settings live in `great-docs.yml`, and the guide pages live in `user_guide/`. Install the group, build the site, then preview it in a browser:
+
+```{bash}
+#| eval: false
+#| code-fold: false
+#| echo: true
+uv sync --group docs
+uv run great-docs build
+uv run great-docs preview
+```
+
+The reference pages come from the numpy style docstrings in `src/shymermaid/`. A new public function needs a docstring and an entry in the `reference` section of `great-docs.yml`.
+
+::: {.callout-warning}
+Diagrams on these pages must use a `{mermaid}` cell, not a plain mermaid fence. A plain fence builds with no warning but shows the Mermaid source as text.
+:::
+
+The build writes to `great-docs/`, which is listed in `.gitignore`.

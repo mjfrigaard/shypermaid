@@ -1,0 +1,91 @@
+---
+title: "Render Cycle"
+guide-section: "Explanation"
+---
+
+This page follows one edit from the text area to the drawn diagram. The path crosses from Python to the browser once, and knowing where it crosses explains most of the app's behavior.
+
+## Committing the code
+
+The editor does not pass every keystroke to the viewer. `editor_server()` keeps a separate value called `committed`, and only committed code reaches the viewer. The Auto-Update switch decides when an edit is committed:
+
+```{mermaid}
+%%| eval: true
+%%{init: {'theme': 'base', 'themeVariables': { 'fontFamily': 'monospace', "fontSize":"18px", "darkMode":false}}}%%
+
+flowchart TD
+    edit(["User edits code"]) --> auto{"Auto-Update on?"}
+    auto -->|"yes"| commit("<code>committed.set(code)</code>")
+    auto -->|"no"| wait("Wait")
+    wait --> btn(["User clicks Render"])
+    btn --> commit
+    commit --> out[/"<code>committed</code> changes"/]
+
+    style edit fill:#dfdfde
+    style btn fill:#dfdfde
+    style commit fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style wait fill:#fff
+    style out fill:#b3cde0
+```
+
+Turning Auto-Update back on also commits the current code. The `_auto` effect reads both the code and the switch, so a change to either one runs it again.
+
+## Crossing to the browser
+
+`viewer_server()` has one effect, and it runs when the committed code or any of the three menus changes. It doesn't return an output. Instead it sends a custom message named `shymermaid-render` to the browser:
+
+```{mermaid}
+%%| eval: true
+%%{init: {'theme': 'base', 'themeVariables': { 'fontFamily': 'monospace', "fontSize":"18px", "darkMode":false}}}%%
+
+flowchart TD
+    subgraph Py["<strong>Python</strong>"]
+        inputs[/"<code>code()</code>, <code>theme</code>,<br><code>look</code>, <code>direction</code>"/]
+        dir[["<code>set_direction()</code>"]]
+        cfg[["<code>render_config()</code>"]]
+        send("<code>send_custom_message()</code>")
+    end
+    subgraph JS["<strong>Browser</strong>"]
+        parse{"<code>mermaid.parse()</code><br>succeeds?"}
+        draw("<code>mermaid.render()</code><br>replace the SVG")
+        pz("Attach svg-pan-zoom")
+        err("Show the error<br>keep the last diagram")
+    end
+    inputs -->|"i. rewrite header"| dir
+    inputs -->|"ii. build options"| cfg
+    dir & cfg --> send
+    send -->|"iii. id, code, config"| parse
+    parse -->|"yes"| draw --> pz
+    parse -->|"no"| err
+
+    style Py fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
+    style JS fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
+    style send fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style draw fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style pz fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style err fill:#fdecea,color:#8a1c13,rx:5,ry:5
+```
+
+The top box runs in `viewer_server()` and the bottom box runs in `mermaid-binding.js`. The message carries three things: the namespaced canvas id, the code after `set_direction()`, and the options from `render_config()`. When the options ask for the ELK layout, the binding first imports the `@mermaid-js/layout-elk` plugin (once per page) and registers it with Mermaid. The id lets two viewers on one page draw into their own canvases.
+
+## Why errors keep the last diagram
+
+The binding calls `mermaid.parse()` before `mermaid.render()`. A parse error jumps to the error handler before the old SVG is removed, so the canvas keeps the last good diagram. The error text is set with `textContent`, which means a message from Mermaid can't inject HTML into the page.
+
+`render_config()` also sets `securityLevel` to `"strict"`. In strict mode Mermaid disables click handlers in diagrams and cleans the HTML in labels.
+
+## What the browser handles alone
+
+Some actions never reach Python. The tool buttons, the Tab key in the editor, and window resizing are all handled in `mermaid-binding.js`:
+
+* Tool buttons: each button carries `data-sm-action` and `data-sm-target` attributes, and one click listener on the page reads them.
+* Tab key: inserts four spaces in the editor instead of moving focus. Press Escape, then Tab or Shift+Tab, to leave the editor.
+* Highlighting: each edit recolors a `<pre>` that sits behind the text area. The text area's own text is transparent, so Shiny still reads a plain `<textarea>`.
+* Resizing: a `ResizeObserver` refits the diagram when the sidebar opens or closes.
+* PNG download: draws the saved SVG on a canvas from a `data:` URL. A `blob:` URL would taint the canvas, because the HTML labels sit in `foreignObject` elements.
+
+Because these run in the browser, they respond at once and add no load on the server.
+
+## Recap
+
+Edits become committed code through the Auto-Update switch or the Render button. `viewer_server()` prepares the code and options in Python and sends them as one custom message. The browser parses, draws, and attaches pan and zoom, and a parse error leaves the last good diagram on the canvas.

@@ -4,27 +4,21 @@ A Shiny for Python (Core) app-package that renders Mermaid diagrams. Write Merma
 
 ## Features
 
-- Code editor in a collapsible sidebar, with an Auto-Update switch and a Render button
-- Theme (default, neutral, dark, forest, base), look (classic, hand drawn), and direction (as written, TD, BT, LR, RL) menus
-- Pan and zoom, 1:1, fit to screen, fullscreen, and SVG download
+- Code editor with Mermaid syntax highlighting in a collapsible sidebar, with an Auto-Update switch and a Render button
+- Tab inserts spaces in the editor; press Escape, then Tab, to move focus out
+- Theme (default, neutral, dark, forest, base), look (classic, hand drawn), layout (Dagre, ELK), and direction (as written, TD, BT, LR, RL) menus
+- Pan and zoom, 1:1, fit to screen, fullscreen, and SVG or PNG download
 - Parse errors show on the canvas while the last good diagram stays in place
 
 ## Install
 
-Using `uv`:
+This package uses [`uv`](https://docs.astral.sh/uv/). `uv sync` creates `.venv/`, installs the package in editable mode, and adds the `dev` group (pytest, ruff, mypy):
 
 ```bash
-uv venv
-uv pip install -e ".[dev]"
+uv sync
 ```
 
-Using `venv`:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-```
+Add `--group docs` to also install great-docs (Python 3.11 or later).
 
 ## Run
 
@@ -72,10 +66,24 @@ The page also needs the Mermaid, svg-pan-zoom, and `www/` assets that `shymermai
 
 ## Develop
 
+The editor tests in `tests/test_editor_highlight.py` drive a browser with Playwright. Install its Chromium once:
+
+```bash
+uv run playwright install chromium
+```
+
 ```bash
 uv run pytest
 uv run ruff check src tests
 uv run mypy src
+```
+
+Build and preview the docs site:
+
+```bash
+uv sync --group docs
+uv run great-docs build
+uv run great-docs preview
 ```
 
 ## Layout

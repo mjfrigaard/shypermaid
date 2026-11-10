@@ -34,25 +34,72 @@
   color: var(--sm-ink);
   text-decoration: none;
 }
-.sm-editor > .shiny-input-container {
+/* Code pane: a highlighted <pre> behind a textarea with transparent text */
+.sm-code {
+  position: relative;
   flex: 1 1 auto;
   min-height: 0;
-  margin: 0;
 }
-.sm-editor textarea {
-  height: 100% !important;
-  resize: none;
+.sm-code > .shiny-input-container {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  width: 100% !important;
+}
+.sm-highlight,
+.sm-code textarea {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.75rem 1rem;
   border: 0;
-  border-radius: 0;
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 0.9rem;
   line-height: 1.5;
+  letter-spacing: 0;
   white-space: pre;
+  overflow-wrap: normal;
   tab-size: 4;
 }
-.sm-editor textarea:focus {
-  box-shadow: none;
+.sm-highlight {
+  position: absolute;
+  inset: 0;
+  overflow: auto; /* same scrollbars as the textarea, so both scroll the same range */
+  pointer-events: none;
+  background: #fff;
+  color: var(--sm-ink);
 }
+.sm-highlight code {
+  font: inherit;
+  color: inherit;
+  background: none;
+  padding: 0;
+}
+.sm-code textarea {
+  position: relative;
+  z-index: 1;
+  height: 100% !important;
+  resize: none;
+  border-radius: 0;
+  background: transparent !important;
+  color: transparent;
+  caret-color: var(--sm-ink);
+}
+.sm-code textarea:focus {
+  box-shadow: none;
+  color: transparent; /* .form-control:focus would restore the text color */
+}
+.sm-code textarea::selection {
+  background: rgba(76, 187, 157, 0.3);
+  color: transparent;
+}
+
+/* Mermaid tokens */
+.sm-tok-comment { color: #7a8a93; }
+.sm-tok-keyword { color: #1f6f8b; }
+.sm-tok-dir { color: #b05d00; }
+.sm-tok-string { color: #2e7d32; }
+.sm-tok-arrow { color: #8e3fae; }
+.sm-tok-label { color: #a8326b; }
 
 /* Viewer */
 .sm-viewer {
@@ -138,6 +185,6 @@
 .sm-editor-header label {
   white-space: nowrap;
 }
-.sm-editor > .shiny-input-container > textarea {
+.sm-code > .shiny-input-container > textarea {
   min-height: 100%;
 }

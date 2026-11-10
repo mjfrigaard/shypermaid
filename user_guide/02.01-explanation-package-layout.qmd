@@ -1,0 +1,78 @@
+---
+title: "Package Layout"
+guide-section: "Explanation"
+---
+
+This page explains how `shymermaid` is split into files and why. It won't tell you how to do something; the How-To guides cover that.
+
+## Three layers
+
+The package has three layers, and each one only calls the layer below it. The diagram below shows the files in each layer and the calls between them:
+
+```{mermaid}
+%%| eval: true
+%%{init: {'theme': 'base', 'themeVariables': { 'fontFamily': 'monospace', "fontSize":"18px", "darkMode":false}}}%%
+
+flowchart TD
+    subgraph App["<strong>app.py</strong>"]
+        run(["<code>run_app()</code>"])
+        create("<code>create_app()</code>")
+        appui("<code>app_ui()</code>")
+        srv("<code>server()</code>")
+    end
+    subgraph Modules["<strong>modules.py</strong>"]
+        editor("<code>editor_ui()</code><br><code>editor_server()</code>")
+        viewer("<code>viewer_ui()</code><br><code>viewer_server()</code>")
+    end
+    subgraph Diagram["<strong>diagram.py</strong>"]
+        dir[["<code>set_direction()</code>"]]
+        cfg[["<code>render_config()</code>"]]
+        consts[("<code>THEMES</code>, <code>LOOKS</code>,<br><code>DIRECTIONS</code>, <code>DEFAULT_CODE</code>")]
+    end
+    www[("<code>www/</code><br>binding and styles")]
+
+    run --> create --> appui & srv
+    create -.-> www
+    appui --> editor & viewer
+    srv --> editor & viewer
+    viewer --> dir & cfg
+    editor & viewer --> consts
+
+    style App fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
+    style Modules fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
+    style Diagram fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
+    style run fill:#4CBB9D,color:#FFFFFF
+    style create fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style appui fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style srv fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style editor fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style viewer fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+```
+
+`app.py` assembles the page and launches the server. `modules.py` holds the two Shiny modules. `diagram.py` holds plain Python functions and the menu choices.
+
+## Why the helpers are Shiny free
+
+`diagram.py` never imports `shiny`. Its two functions take strings and return a string or a dictionary, so the tests call them directly without starting a session. That's why `diagram.py` has full test coverage while the module servers do not.
+
+The same split keeps the menu choices in one place. `THEMES`, `LOOKS`, and `DIRECTIONS` fill the viewer's menus and also validate the arguments to `render_config()` and `set_direction()`. A new theme only needs a new dictionary entry.
+
+## Why the drawing happens in the browser
+
+Mermaid is a JavaScript library, so the diagram is drawn in the browser, not in Python. The files in `www/` handle that side. `mermaid-binding.js` receives the code from the server, draws it, and runs the pan, zoom, fullscreen, and download tools. `styles.css` lays out the editor and canvas.
+
+`create_app()` serves `www/` at `/shymermaid` through the `static_assets` argument. The folder ships inside the package, so the paths work after a regular install as well as an editable one.
+
+## A name to watch: `shymermaid.app`
+
+`__init__.py` re-exports the `App` object named `app` from `app.py`:
+
+```python
+from .app import app, create_app, run_app
+```
+
+The re-exported name matches the submodule name, so after `import shymermaid` the attribute `shymermaid.app` is the `App` object, not the module. `shiny run shymermaid.app:app` still works because it imports the module by its full name. Plain attribute access does not, so code that needs `app_ui()` or `WWW` should use `from shymermaid.app import app_ui, WWW`.
+
+## Recap
+
+The package keeps the app, the modules, and the helpers in separate files, and each layer calls only the one below it. The helpers stay free of Shiny so they're easy to test, and the drawing lives in `www/` because Mermaid runs in the browser. The [Render Cycle](02.02-explanation-render-cycle.qmd) page follows one edit through all three layers.

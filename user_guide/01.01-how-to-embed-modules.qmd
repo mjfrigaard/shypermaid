@@ -1,0 +1,98 @@
+---
+title: "Embed the Modules"
+guide-section: "How-To"
+---
+
+The editor and viewer are Shiny Core modules, so you can place them in another app. This guide shows the smallest app that uses both, and the assets the page needs for the viewer to draw anything.
+
+## Connect the editor to the viewer
+
+Each module has a UI function and a server function. `editor_server()` returns the committed Mermaid code, and `viewer_server()` takes that value as its `code` argument:
+
+```{mermaid}
+%%| eval: true
+%%{init: {'theme': 'base', 'themeVariables': { 'fontFamily': 'monospace', "fontSize":"18px", "darkMode":false}}}%%
+
+flowchart TD
+    subgraph UI["<strong>UI</strong>"]
+        eui("<code>editor_ui('editor')</code>")
+        vui("<code>viewer_ui('viewer')</code>")
+    end
+    subgraph Server["<strong>Server</strong>"]
+        esrv("<code>editor_server('editor')</code>")
+        code[/"<code>code</code><br>reactive.Value[str]"/]
+        vsrv("<code>viewer_server('viewer', code=code)</code>")
+    end
+    eui -.-> esrv
+    esrv --> code --> vsrv
+    vui -.-> vsrv
+
+    style UI fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
+    style Server fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
+    style eui fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style vui fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style esrv fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style vsrv fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+```
+
+The dotted lines pair each UI function with its server function through a shared id. The solid line is the only data that crosses between the modules.
+
+## Add the page assets
+
+The viewer draws nothing on its own. The browser needs Mermaid, svg-pan-zoom, and the package's JavaScript binding, and the page needs the package stylesheet. The app below adds all four to the page head and serves the package's `www/` folder at `/shymermaid`:
+
+```python
+from pathlib import Path
+
+import shymermaid
+from shiny import App, ui
+
+from shymermaid import editor_server, editor_ui, viewer_server, viewer_ui
+
+WWW = Path(shymermaid.__file__).parent / "www"
+MERMAID_JS = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"
+PANZOOM_JS = "https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"
+
+app_ui = ui.page_fillable(
+    ui.head_content(
+        ui.tags.script(src=MERMAID_JS),
+        ui.tags.script(src=PANZOOM_JS),
+        ui.tags.link(rel="stylesheet", href="shymermaid/styles.css"),
+        ui.tags.script(src="shymermaid/mermaid-binding.js"),
+    ),
+    ui.layout_sidebar(ui.sidebar(editor_ui("editor")), viewer_ui("viewer")),
+)
+
+
+def server(input, output, session):
+    code = editor_server("editor")
+    viewer_server("viewer", code=code)
+
+
+app = App(app_ui, server, static_assets={"/shymermaid": WWW})
+```
+
+The script order matters. Mermaid and svg-pan-zoom must load before `mermaid-binding.js`, because the binding calls both libraries when the first diagram arrives.
+
+::: {.callout-warning}
+Without the `static_assets` argument, the stylesheet and binding return 404 errors. The page still loads, but the canvas stays empty and no error appears in the app.
+:::
+
+## Use your own code source
+
+`viewer_server()` accepts any `reactive.Value[str]`, so the editor is optional. A fixed diagram, a file reader, or another module can supply the code instead:
+
+```python
+from shiny import reactive
+
+
+def server(input, output, session):
+    code = reactive.Value("flowchart TD\n    a --> b")
+    viewer_server("viewer", code=code)
+```
+
+We can confirm it works by running the app and checking that the canvas shows the two node flowchart.
+
+## Recap
+
+Pass the value from `editor_server()` (or any `reactive.Value[str]`) to `viewer_server()`. Add the two libraries, the stylesheet, and the binding to the page head, and serve `www/` at `/shymermaid`. The [Render Cycle](02.02-explanation-render-cycle.qmd) page explains what happens to the code after it leaves Python.

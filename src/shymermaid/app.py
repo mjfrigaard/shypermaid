@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from shiny import App, Inputs, Outputs, Session, ui
-from shiny._main import run_app as _run_app
+from shiny import run_app as _run_app
 
 from .modules import editor_server, editor_ui, viewer_server, viewer_ui
 
@@ -16,6 +16,14 @@ PANZOOM_JS = "https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.
 
 
 def app_ui() -> ui.Tag:
+    """Build the full page: editor sidebar, diagram viewer, and assets.
+
+    Returns
+    -------
+    ui.Tag
+        A fillable page with the Mermaid and svg-pan-zoom scripts, the
+        package stylesheet, and the JavaScript binding in the page head.
+    """
     return ui.page_fillable(
         ui.head_content(
             ui.tags.script(src=MERMAID_JS),
@@ -36,11 +44,25 @@ def app_ui() -> ui.Tag:
 
 
 def server(input: Inputs, output: Outputs, session: Session) -> None:
+    """Connect the editor module to the viewer module.
+
+    Parameters
+    ----------
+    input, output, session
+        Supplied by Shiny.
+    """
     code = editor_server("editor")
     viewer_server("viewer", code=code)
 
 
 def create_app() -> App:
+    """Create the Shiny app and serve ``www/`` at ``/shymermaid``.
+
+    Returns
+    -------
+    App
+        The assembled Shiny app.
+    """
     return App(app_ui(), server, static_assets={"/shymermaid": WWW})
 
 
@@ -48,4 +70,15 @@ app = create_app()
 
 
 def run_app(host: str = "127.0.0.1", port: int = 8000) -> None:
+    """Launch the app and open it in a browser.
+
+    Parameters
+    ----------
+    host
+        Address to bind to.
+    port
+        Port to listen on.
+    """
+    if _run_app is None:  # shiny exports None under Pyodide
+        raise RuntimeError("run_app() is not available in Pyodide")
     _run_app("shymermaid.app:app", host=host, port=port, launch_browser=True)
