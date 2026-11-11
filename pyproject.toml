@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "shymermaid"
+name = "shypermaid"
 version = "0.2.0"
 description = "Shiny for Python app-package that renders Mermaid diagrams"
 readme = "README.md"
@@ -21,10 +21,10 @@ dev = [
 docs = ["great-docs; python_version >= '3.11'"]
 
 [project.scripts]
-shymermaid = "shymermaid.app:run_app"
+shypermaid = "shypermaid.app:run_app"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/shymermaid"]
+packages = ["src/shypermaid"]
 
 [tool.hatch.build.targets.sdist]
 exclude = ["electron", "tools"]

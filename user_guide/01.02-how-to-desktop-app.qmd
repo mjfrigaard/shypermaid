@@ -3,7 +3,7 @@ title: "Build the Desktop App"
 guide-section: "How-To"
 ---
 
-shymermaid also runs as a desktop app: a window of its own, no terminal, and no internet connection. The installers are built with [shinyelectron](https://r-pkg.thecoatlessprofessor.com/shinyelectron/), an R package that wraps a Shiny app in Electron. This guide shows how to install a release, build an installer on your own machine, and publish installers for every operating system.
+shypermaid also runs as a desktop app: a window of its own, no terminal, and no internet connection. The installers are built with [shinyelectron](https://r-pkg.thecoatlessprofessor.com/shinyelectron/), an R package that wraps a Shiny app in Electron. This guide shows how to install a release, build an installer on your own machine, and publish installers for every operating system.
 
 ## Install a release
 
@@ -26,18 +26,18 @@ The installers are not signed yet, so the operating system warns you the first t
 
 ## How the build works
 
-shinyelectron builds from an app folder that holds an `app.py`, not from a Python package. The `electron/` folder bridges the two: a script copies the package into `electron/app/`, next to a one line `app.py` that imports `shymermaid.app.app`. shinyelectron then bundles that folder with Python and Electron into an installer.
+shinyelectron builds from an app folder that holds an `app.py`, not from a Python package. The `electron/` folder bridges the two: a script copies the package into `electron/app/`, next to a one line `app.py` that imports `shypermaid.app.app`. shinyelectron then bundles that folder with Python and Electron into an installer.
 
 ```{mermaid}
 %%| eval: true
 %%{init: {'theme': 'base', 'themeVariables': { 'fontFamily': 'monospace', "fontSize":"18px", "darkMode":false}}}%%
 
 flowchart TD
-    pkg[("<code>src/shymermaid/</code>")]
+    pkg[("<code>src/shypermaid/</code>")]
     scaffold("<code>scaffold_py.py</code>")
     subgraph App["<strong>electron/app/</strong>"]
         launcher("<code>app.py</code>")
-        copy[("<code>shymermaid/</code>")]
+        copy[("<code>shypermaid/</code>")]
         yml("<code>_shinyelectron.yml</code>")
     end
     export("<code>export()</code>")
@@ -60,7 +60,7 @@ The files in `electron/` have three jobs:
 * `electron/app/_shinyelectron.yml`: the app name, the version (copied from `pyproject.toml`), and the runtime strategy.
 * `electron/build.R`: checks the app folder with `app_check()` and builds the installer with `export()`.
 
-The copied package in `electron/app/shymermaid/` and the build output in `electron/dist/` are listed in `.gitignore`. The copy is refreshed before every build, so the package source stays the only place to edit.
+The copied package in `electron/app/shypermaid/` and the build output in `electron/dist/` are listed in `.gitignore`. The copy is refreshed before every build, so the package source stays the only place to edit.
 
 The app uses the `bundled` strategy: the installer carries a portable Python, so it works offline on a machine with nothing installed. This is also why the JavaScript libraries ship inside the package (see [Checks and Docs](04.00-dev-checks-and-docs.qmd)).
 
@@ -77,7 +77,7 @@ shinyelectron::install_nodejs()   # if Node is missing or too old
 From the package root, refresh `electron/app/`, then build:
 
 ```bash
-uv run python tools/scaffold_py.py --strategy=bundled --module=shymermaid.app
+uv run python tools/scaffold_py.py --strategy=bundled --module=shypermaid.app
 Rscript electron/build.R
 ```
 

@@ -283,6 +283,6 @@
       var hint = ta.closest(".sm-editor").querySelector(".sm-key-hint");
       if (hint) ta.setAttribute("aria-describedby", hint.id);
     });
-    Shiny.addCustomMessageHandler("shymermaid-render", render);
+    Shiny.addCustomMessageHandler("shypermaid-render", render);
   });
 })();

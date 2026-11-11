@@ -32,7 +32,7 @@ Turning Auto-Update back on also commits the current code. The `_auto` effect re
 
 ## Crossing to the browser
 
-`viewer_server()` has one effect, and it runs when the committed code or any of the three menus changes. It doesn't return an output. Instead it sends a custom message named `shymermaid-render` to the browser:
+`viewer_server()` has one effect, and it runs when the committed code or any of the three menus changes. It doesn't return an output. Instead it sends a custom message named `shypermaid-render` to the browser:
 
 ```{mermaid}
 %%| eval: true

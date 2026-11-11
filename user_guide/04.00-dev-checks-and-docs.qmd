@@ -25,7 +25,7 @@ uv run playwright install chromium
 
 ## Update the vendored libraries
 
-The app serves its JavaScript libraries from `src/shymermaid/www/vendor/` instead of a CDN, so it runs offline and inside a desktop app:
+The app serves its JavaScript libraries from `src/shypermaid/www/vendor/` instead of a CDN, so it runs offline and inside a desktop app:
 
 | File | Package | Version |
 |---|---|---|
@@ -36,7 +36,7 @@ The app serves its JavaScript libraries from `src/shymermaid/www/vendor/` instea
 To change a version, edit it in the commands below, download the files again, and run the tests:
 
 ```bash
-V=src/shymermaid/www/vendor
+V=src/shypermaid/www/vendor
 NPM=https://cdn.jsdelivr.net/npm
 curl -fsSL -o $V/mermaid.min.js $NPM/mermaid@11.4.1/dist/mermaid.min.js
 curl -fsSL -o $V/svg-pan-zoom.min.js $NPM/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js
@@ -68,7 +68,7 @@ uv run great-docs build
 uv run great-docs preview
 ```
 
-The reference pages come from the numpy style docstrings in `src/shymermaid/`. A new public function needs a docstring and an entry in the `reference` section of `great-docs.yml`.
+The reference pages come from the numpy style docstrings in `src/shypermaid/`. A new public function needs a docstring and an entry in the `reference` section of `great-docs.yml`.
 
 ::: {.callout-warning}
 Diagrams on these pages must use a `{mermaid}` cell, not a plain mermaid fence. A plain fence builds with no warning but shows the Mermaid source as text.

@@ -1,7 +1,7 @@
 from shiny import App
 
-from shymermaid import create_app
-from shymermaid.app import WWW, app_ui
+from shypermaid import create_app
+from shypermaid.app import WWW, app_ui
 
 
 def test_create_app():
@@ -26,11 +26,11 @@ def test_static_assets_exist():
 
 
 def test_vendored_libraries_exist():
-    from shymermaid.app import MERMAID_JS, PANZOOM_JS
+    from shypermaid.app import MERMAID_JS, PANZOOM_JS
 
     for src in (MERMAID_JS, PANZOOM_JS):
         assert not src.startswith("http")
-        assert (WWW / src.removeprefix("shymermaid/")).is_file()
+        assert (WWW / src.removeprefix("shypermaid/")).is_file()
     assert (WWW / "vendor/layout-elk/mermaid-layout-elk.esm.min.mjs").is_file()
 
 

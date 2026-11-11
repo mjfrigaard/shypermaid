@@ -9,9 +9,9 @@ from shiny import App as ShinyApp
 from shiny import Inputs, Outputs, Session
 from shiny.testserver import TestServerSession, test_server
 
-from shymermaid import create_app
-from shymermaid.diagram import DEFAULT_CODE, render_config
-from shymermaid.modules import editor_server, viewer_server
+from shypermaid import create_app
+from shypermaid.diagram import DEFAULT_CODE, render_config
+from shypermaid.modules import editor_server, viewer_server
 
 EDITOR = {"code": DEFAULT_CODE, "auto": True, "render": 0}
 VIEWER = {"theme": "default", "look": "classic", "layout": "dagre", "direction": "asis"}
@@ -71,7 +71,7 @@ def test_sends_render_message(app: App):
     with started(app.server) as ts:
         assert ts.is_ok
     type_, msg = app.messages[-1]
-    assert type_ == "shymermaid-render"
+    assert type_ == "shypermaid-render"
     assert msg["id"] == "viewer-canvas"
     assert msg["code"] == DEFAULT_CODE
     assert msg["config"] == render_config("default", "classic", "dagre")

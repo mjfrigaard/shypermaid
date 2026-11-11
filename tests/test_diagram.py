@@ -1,6 +1,6 @@
 import pytest
 
-from shymermaid.diagram import DEFAULT_CODE, render_config, set_direction
+from shypermaid.diagram import DEFAULT_CODE, render_config, set_direction
 
 
 def test_set_direction_replaces_existing():

@@ -157,7 +157,7 @@ def viewer_server(
     @reactive.effect
     async def _render() -> None:
         await session.send_custom_message(
-            "shymermaid-render",
+            "shypermaid-render",
             {
                 "id": session.ns("canvas"),
                 "code": set_direction(code(), input.direction()),

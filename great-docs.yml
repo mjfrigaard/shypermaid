@@ -94,7 +94,7 @@ dynamic: true
 # Canonical address of the deployed docs site. Used for skills-page install
 # commands, .well-known/ discovery, sitemaps, and subdirectory deployments;
 # also sets website.site-url in _quarto.yml.
-site_url: "https://mjfrigaard.github.io/shymermaid/"
+site_url: "https://mjfrigaard.github.io/shypermaid/"
 
 # Source Link Configuration
 # -------------------------

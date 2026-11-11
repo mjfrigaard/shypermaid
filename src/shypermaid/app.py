@@ -12,8 +12,8 @@ from .modules import editor_server, editor_ui, viewer_server, viewer_ui
 
 WWW = Path(__file__).parent / "www"
 
-MERMAID_JS = "shymermaid/vendor/mermaid.min.js"
-PANZOOM_JS = "shymermaid/vendor/svg-pan-zoom.min.js"
+MERMAID_JS = "shypermaid/vendor/mermaid.min.js"
+PANZOOM_JS = "shypermaid/vendor/svg-pan-zoom.min.js"
 
 # The ELK layout plugin loads as ES modules (.mjs); some Python builds don't
 # map that extension, and browsers refuse modules served as text/plain.
@@ -33,8 +33,8 @@ def app_ui() -> ui.Tag:
         ui.head_content(
             ui.tags.script(src=MERMAID_JS),
             ui.tags.script(src=PANZOOM_JS),
-            ui.tags.link(rel="stylesheet", href="shymermaid/styles.css"),
-            ui.tags.script(src="shymermaid/mermaid-binding.js"),
+            ui.tags.link(rel="stylesheet", href="shypermaid/styles.css"),
+            ui.tags.script(src="shypermaid/mermaid-binding.js"),
         ),
         ui.layout_sidebar(
             ui.sidebar(editor_ui("editor"), width=560, padding=0),
@@ -44,7 +44,7 @@ def app_ui() -> ui.Tag:
             padding=0,
         ),
         padding=0,
-        title="shymermaid",
+        title="shypermaid",
     )
 
 
@@ -61,14 +61,14 @@ def server(input: Inputs, output: Outputs, session: Session) -> None:
 
 
 def create_app() -> App:
-    """Create the Shiny app and serve ``www/`` at ``/shymermaid``.
+    """Create the Shiny app and serve ``www/`` at ``/shypermaid``.
 
     Returns
     -------
     App
         The assembled Shiny app.
     """
-    return App(app_ui(), server, static_assets={"/shymermaid": WWW})
+    return App(app_ui(), server, static_assets={"/shypermaid": WWW})
 
 
 app = create_app()
@@ -86,4 +86,4 @@ def run_app(host: str = "127.0.0.1", port: int = 8000) -> None:
     """
     if _run_app is None:  # shiny exports None under Pyodide
         raise RuntimeError("run_app() is not available in Pyodide")
-    _run_app("shymermaid.app:app", host=host, port=port, launch_browser=True)
+    _run_app("shypermaid.app:app", host=host, port=port, launch_browser=True)

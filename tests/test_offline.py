@@ -44,8 +44,8 @@ def test_elk_loads_without_network(offline):
 @pytest.mark.parametrize(
     "path",
     [
-        "shymermaid/vendor/layout-elk/mermaid-layout-elk.esm.min.mjs",
-        "shymermaid/vendor/layout-elk/chunks/mermaid-layout-elk.esm.min/render-GJFLM4CZ.mjs",
+        "shypermaid/vendor/layout-elk/mermaid-layout-elk.esm.min.mjs",
+        "shypermaid/vendor/layout-elk/chunks/mermaid-layout-elk.esm.min/render-GJFLM4CZ.mjs",
     ],
 )
 def test_mjs_served_as_javascript(page: Page, app, path: str):

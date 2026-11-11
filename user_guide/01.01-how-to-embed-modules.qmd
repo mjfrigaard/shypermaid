@@ -39,26 +39,26 @@ The dotted lines pair each UI function with its server function through a shared
 
 ## Add the page assets
 
-The viewer draws nothing on its own. The browser needs Mermaid, svg-pan-zoom, and the package's JavaScript binding, and the page needs the package stylesheet. All four ship in the package's `www/` folder (the libraries are in `www/vendor/`), so the app works offline. The app below adds them to the page head and serves `www/` at `/shymermaid`:
+The viewer draws nothing on its own. The browser needs Mermaid, svg-pan-zoom, and the package's JavaScript binding, and the page needs the package stylesheet. All four ship in the package's `www/` folder (the libraries are in `www/vendor/`), so the app works offline. The app below adds them to the page head and serves `www/` at `/shypermaid`:
 
 ```python
 from pathlib import Path
 
-import shymermaid
+import shypermaid
 from shiny import App, ui
 
-from shymermaid import editor_server, editor_ui, viewer_server, viewer_ui
+from shypermaid import editor_server, editor_ui, viewer_server, viewer_ui
 
-WWW = Path(shymermaid.__file__).parent / "www"
-MERMAID_JS = "shymermaid/vendor/mermaid.min.js"
-PANZOOM_JS = "shymermaid/vendor/svg-pan-zoom.min.js"
+WWW = Path(shypermaid.__file__).parent / "www"
+MERMAID_JS = "shypermaid/vendor/mermaid.min.js"
+PANZOOM_JS = "shypermaid/vendor/svg-pan-zoom.min.js"
 
 app_ui = ui.page_fillable(
     ui.head_content(
         ui.tags.script(src=MERMAID_JS),
         ui.tags.script(src=PANZOOM_JS),
-        ui.tags.link(rel="stylesheet", href="shymermaid/styles.css"),
-        ui.tags.script(src="shymermaid/mermaid-binding.js"),
+        ui.tags.link(rel="stylesheet", href="shypermaid/styles.css"),
+        ui.tags.script(src="shypermaid/mermaid-binding.js"),
     ),
     ui.layout_sidebar(ui.sidebar(editor_ui("editor")), viewer_ui("viewer")),
 )
@@ -69,7 +69,7 @@ def server(input, output, session):
     viewer_server("viewer", code=code)
 
 
-app = App(app_ui, server, static_assets={"/shymermaid": WWW})
+app = App(app_ui, server, static_assets={"/shypermaid": WWW})
 ```
 
 The script order matters. Mermaid and svg-pan-zoom must load before `mermaid-binding.js`, because the binding calls both libraries when the first diagram arrives.
@@ -95,4 +95,4 @@ We can confirm it works by running the app and checking that the canvas shows th
 
 ## Recap
 
-Pass the value from `editor_server()` (or any `reactive.Value[str]`) to `viewer_server()`. Add the two libraries, the stylesheet, and the binding to the page head, and serve `www/` at `/shymermaid`. The [Render Cycle](02.02-explanation-render-cycle.qmd) page explains what happens to the code after it leaves Python.
+Pass the value from `editor_server()` (or any `reactive.Value[str]`) to `viewer_server()`. Add the two libraries, the stylesheet, and the binding to the page head, and serve `www/` at `/shypermaid`. The [Render Cycle](02.02-explanation-render-cycle.qmd) page explains what happens to the code after it leaves Python.

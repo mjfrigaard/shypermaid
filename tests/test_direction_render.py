@@ -2,7 +2,7 @@ import pytest
 from playwright.sync_api import Page
 from shiny.pytest import create_app_fixture
 
-from shymermaid.diagram import DIRECTIONS, set_direction
+from shypermaid.diagram import DIRECTIONS, set_direction
 
 app = create_app_fixture("e2e_app.py")
 

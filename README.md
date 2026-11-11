@@ -1,8 +1,8 @@
-# shymermaid
+# shypermaid
 
 A Shiny for Python (Core) app-package that renders Mermaid diagrams. Write Mermaid code in the left pane and the diagram updates on the canvas to the right.
 
-![The shymermaid editor and canvas](assets/app.png)
+![The shypermaid editor and canvas](assets/app.png)
 
 ## Features
 
@@ -25,19 +25,19 @@ Add `--group docs` to also install great-docs (Python 3.11 or later).
 ## Run
 
 ```bash
-uv run shymermaid
+uv run shypermaid
 ```
 
 Or with autoreload during development:
 
 ```bash
-uv run shiny run shymermaid.app:app --reload
+uv run shiny run shypermaid.app:app --reload
 ```
 
 From Python:
 
 ```python
-from shymermaid import run_app
+from shypermaid import run_app
 
 run_app(port=8000)
 ```
@@ -46,14 +46,14 @@ The app ships its own copies of Mermaid, svg-pan-zoom, and the ELK layout plugin
 
 ## Desktop app
 
-shymermaid also ships as a desktop app (`.dmg`, `.exe`, `.AppImage`) built with [shinyelectron](https://r-pkg.thecoatlessprofessor.com/shinyelectron/). Download an installer from the GitHub releases, or build one yourself; see [Build the Desktop App](https://mjfrigaard.github.io/shymermaid/user-guide/01.02-how-to-desktop-app.html).
+shypermaid also ships as a desktop app (`.dmg`, `.exe`, `.AppImage`) built with [shinyelectron](https://r-pkg.thecoatlessprofessor.com/shinyelectron/). Download an installer from the GitHub releases, or build one yourself; see [Build the Desktop App](https://mjfrigaard.github.io/shypermaid/user-guide/01.02-how-to-desktop-app.html).
 
 ## Use the modules in another app
 
 ```python
 from shiny import App, ui
 
-from shymermaid import editor_server, editor_ui, viewer_server, viewer_ui
+from shypermaid import editor_server, editor_ui, viewer_server, viewer_ui
 
 app_ui = ui.page_fillable(
     ui.layout_sidebar(ui.sidebar(editor_ui("editor")), viewer_ui("viewer"))
@@ -68,7 +68,7 @@ def server(input, output, session):
 app = App(app_ui, server)
 ```
 
-The page also needs the scripts and stylesheet that `shymermaid.app.app_ui()` adds to the page head, and `www/` served at `/shymermaid` (see [Embed the Modules](https://mjfrigaard.github.io/shymermaid/user-guide/01.01-how-to-embed-modules.html)).
+The page also needs the scripts and stylesheet that `shypermaid.app.app_ui()` adds to the page head, and `www/` served at `/shypermaid` (see [Embed the Modules](https://mjfrigaard.github.io/shypermaid/user-guide/01.01-how-to-embed-modules.html)).
 
 ## Develop
 
@@ -95,7 +95,7 @@ uv run great-docs preview
 ## Layout
 
 ```
-src/shymermaid/
+src/shypermaid/
 ├── __init__.py
 ├── diagram.py      # Shiny free helpers: set_direction(), render_config()
 ├── modules.py      # editor and viewer modules

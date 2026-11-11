@@ -25,13 +25,13 @@ jobs:
         with:
           python-version: "3.12"
       - name: Refresh electron/app
-        run: python tools/scaffold_py.py --strategy=bundled --module=shymermaid.app
+        run: python tools/scaffold_py.py --strategy=bundled --module=shypermaid.app
         shell: bash
 
       - uses: coatless-actions/shiny-to-electron@v1
         with:
           appdir: electron/app
-          app-name: shymermaid
+          app-name: shypermaid
           platform: ${{ matrix.platform }}
           arch: ${{ matrix.arch }}
 

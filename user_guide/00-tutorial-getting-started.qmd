@@ -3,26 +3,26 @@ title: "Getting Started"
 guide-section: "Tutorial"
 ---
 
-This tutorial walks through installing `shymermaid`, launching the app, and drawing a first diagram. By the end you'll have edited Mermaid code, changed the theme and direction, and saved the result as an SVG or PNG file.
+This tutorial walks through installing `shypermaid`, launching the app, and drawing a first diagram. By the end you'll have edited Mermaid code, changed the theme and direction, and saved the result as an SVG or PNG file.
 
 ## Install the package
 
-`shymermaid` uses [`uv`](https://docs.astral.sh/uv/) for package management. Clone the repo, then run `uv sync` to create the environment and install the package with its development tools:
+`shypermaid` uses [`uv`](https://docs.astral.sh/uv/) for package management. Clone the repo, then run `uv sync` to create the environment and install the package with its development tools:
 
 ```bash
-git clone https://github.com/mjfrigaard/shymermaid.git
-cd shymermaid
+git clone https://github.com/mjfrigaard/shypermaid.git
+cd shypermaid
 uv sync
 ```
 
-`uv sync` installs the package in editable mode, along with the `dev` group from `pyproject.toml`. Changes to files in `src/shymermaid/` show up the next time the app starts.
+`uv sync` installs the package in editable mode, along with the `dev` group from `pyproject.toml`. Changes to files in `src/shypermaid/` show up the next time the app starts.
 
 ## Launch the app
 
-The install adds a `shymermaid` command to the environment. Run it with `uv`:
+The install adds a `shypermaid` command to the environment. Run it with `uv`:
 
 ```bash
-uv run shymermaid
+uv run shypermaid
 ```
 
 The command starts a server on `127.0.0.1:8000` and opens the app in a browser. The app ships its own copies of Mermaid, svg-pan-zoom, and the ELK layout plugin, so it works without an internet connection.
@@ -85,4 +85,4 @@ Click SVG to save the diagram. The file holds the diagram as Mermaid drew it, wi
 
 ## Recap
 
-We installed `shymermaid`, launched it with `uv run shymermaid`, and edited a flowchart in the sidebar. The menus change the theme, look, and direction, and the tool buttons control the view and save the SVG or PNG file. The [Embed the Modules](01.01-how-to-embed-modules.qmd) guide shows how to put the editor and viewer in your own app.
+We installed `shypermaid`, launched it with `uv run shypermaid`, and edited a flowchart in the sidebar. The menus change the theme, look, and direction, and the tool buttons control the view and save the SVG or PNG file. The [Embed the Modules](01.01-how-to-embed-modules.qmd) guide shows how to put the editor and viewer in your own app.

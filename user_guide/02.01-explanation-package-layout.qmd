@@ -3,7 +3,7 @@ title: "Package Layout"
 guide-section: "Explanation"
 ---
 
-This page explains how `shymermaid` is split into files and why. It won't tell you how to do something; the How-To guides cover that.
+This page explains how `shypermaid` is split into files and why. It won't tell you how to do something; the How-To guides cover that.
 
 ## Three layers
 
@@ -61,9 +61,9 @@ The same split keeps the menu choices in one place. `THEMES`, `LOOKS`, and `DIRE
 
 Mermaid is a JavaScript library, so the diagram is drawn in the browser, not in Python. The files in `www/` handle that side. `mermaid-binding.js` receives the code from the server, draws it, and runs the pan, zoom, fullscreen, and download tools. `styles.css` lays out the editor and canvas. `vendor/` holds pinned copies of Mermaid, svg-pan-zoom, and the ELK layout plugin, so the app never reaches out to a CDN.
 
-`create_app()` serves `www/` at `/shymermaid` through the `static_assets` argument. The folder ships inside the package, so the paths work after a regular install as well as an editable one.
+`create_app()` serves `www/` at `/shypermaid` through the `static_assets` argument. The folder ships inside the package, so the paths work after a regular install as well as an editable one.
 
-## A name to watch: `shymermaid.app`
+## A name to watch: `shypermaid.app`
 
 `__init__.py` re-exports the `App` object named `app` from `app.py`:
 
@@ -71,7 +71,7 @@ Mermaid is a JavaScript library, so the diagram is drawn in the browser, not in 
 from .app import app, create_app, run_app
 ```
 
-The re-exported name matches the submodule name, so after `import shymermaid` the attribute `shymermaid.app` is the `App` object, not the module. `shiny run shymermaid.app:app` still works because it imports the module by its full name. Plain attribute access does not, so code that needs `app_ui()` or `WWW` should use `from shymermaid.app import app_ui, WWW`.
+The re-exported name matches the submodule name, so after `import shypermaid` the attribute `shypermaid.app` is the `App` object, not the module. `shiny run shypermaid.app:app` still works because it imports the module by its full name. Plain attribute access does not, so code that needs `app_ui()` or `WWW` should use `from shypermaid.app import app_ui, WWW`.
 
 ## Recap
 

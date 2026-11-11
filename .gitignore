@@ -12,4 +12,4 @@ build/
 great-docs/
 _freeze/
 electron/dist/
-electron/app/shymermaid/
+electron/app/shypermaid/
