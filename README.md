@@ -42,7 +42,7 @@ from shypermaid import run_app
 run_app(port=8000)
 ```
 
-The app ships its own copies of Mermaid, svg-pan-zoom, and the ELK layout plugin, so it works without an internet connection.
+The app ships its own copies of Mermaid and svg-pan-zoom, so it works without an internet connection. Mermaid 12 needs a current browser (Safari 17.4 or later, or a recent Chrome, Edge, or Firefox).
 
 ## Desktop app
 
@@ -103,7 +103,7 @@ src/shypermaid/
 └── www/
     ├── mermaid-binding.js
     ├── styles.css
-    └── vendor/     # Mermaid, svg-pan-zoom, layout-elk
+    └── vendor/     # Mermaid, svg-pan-zoom
 tests/
 ├── test_app.py
 └── test_diagram.py

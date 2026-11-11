@@ -11,38 +11,12 @@
     s.pz.center();
   }
 
-  // ELK layouts are an ES module plugin in vendor/, loaded the first time one
-  // is used. layout-elk 0.1.7 matches mermaid 11.4.1; upgrade them together.
-  // Resolved against this script's URL so it works wherever www/ is served.
-  var ELK_URL = new URL(
-    "vendor/layout-elk/mermaid-layout-elk.esm.min.mjs",
-    document.currentScript.src
-  ).href;
-  var elkReady = null;
-
-  function loadLayout(layout) {
-    if (!layout || layout.indexOf("elk") !== 0) return Promise.resolve();
-    if (!elkReady) {
-      elkReady = import(ELK_URL).then(
-        function (m) {
-          window.mermaid.registerLayoutLoaders(m.default);
-        },
-        function (e) {
-          elkReady = null; // let a later render retry
-          throw new Error("Could not load the ELK layout: " + e.message);
-        }
-      );
-    }
-    return elkReady;
-  }
-
   async function render(msg) {
     var el = document.getElementById(msg.id);
     if (!el) return;
     var stage = el.querySelector(".sm-stage");
     var err = el.querySelector(".sm-error");
     try {
-      await loadLayout(msg.config.layout);
       window.mermaid.initialize(msg.config);
       await window.mermaid.parse(msg.code);
       var out = await window.mermaid.render("sm-svg-" + ++seq, msg.code);

@@ -31,7 +31,6 @@ def test_vendored_libraries_exist():
     for src in (MERMAID_JS, PANZOOM_JS):
         assert not src.startswith("http")
         assert (WWW / src.removeprefix("shypermaid/")).is_file()
-    assert (WWW / "vendor/layout-elk/mermaid-layout-elk.esm.min.mjs").is_file()
 
 
 def test_editor_has_highlight_layer():

@@ -40,15 +40,3 @@ def test_elk_loads_without_network(offline):
     expect(page.locator(".sm-error")).to_be_hidden()
     assert external == []
 
-
-@pytest.mark.parametrize(
-    "path",
-    [
-        "shypermaid/vendor/layout-elk/mermaid-layout-elk.esm.min.mjs",
-        "shypermaid/vendor/layout-elk/chunks/mermaid-layout-elk.esm.min/render-GJFLM4CZ.mjs",
-    ],
-)
-def test_mjs_served_as_javascript(page: Page, app, path: str):
-    res = page.request.get(f"{app.url.rstrip('/')}/{path}")
-    assert res.ok
-    assert "javascript" in res.headers["content-type"]

@@ -29,34 +29,23 @@ The app serves its JavaScript libraries from `src/shypermaid/www/vendor/` instea
 
 | File | Package | Version |
 |---|---|---|
-| `mermaid.min.js` | `mermaid` | 11.4.1 |
+| `mermaid.min.js` | `mermaid` | 12.3.0 |
 | `svg-pan-zoom.min.js` | `svg-pan-zoom` | 3.6.2 |
-| `layout-elk/` (entry file and two chunks) | `@mermaid-js/layout-elk` | 0.1.7 |
 
 To change a version, edit it in the commands below, download the files again, and run the tests:
 
 ```bash
 V=src/shypermaid/www/vendor
 NPM=https://cdn.jsdelivr.net/npm
-curl -fsSL -o $V/mermaid.min.js $NPM/mermaid@11.4.1/dist/mermaid.min.js
+curl -fsSL -o $V/mermaid.min.js $NPM/mermaid@12.3.0/dist/mermaid.min.js
 curl -fsSL -o $V/svg-pan-zoom.min.js $NPM/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js
-ELK=$NPM/@mermaid-js/layout-elk@0.1.7/dist
-for f in mermaid-layout-elk.esm.min.mjs \
-         chunks/mermaid-layout-elk.esm.min/chunk-SP2CHFBE.mjs \
-         chunks/mermaid-layout-elk.esm.min/render-GJFLM4CZ.mjs; do
-  curl -fsSL --create-dirs -o $V/layout-elk/$f $ELK/$f
-done
 ```
 
-The chunk names change between ELK releases. List them for a new version with `curl -s https://data.jsdelivr.com/v1/package/npm/@mermaid-js/layout-elk@VERSION/flat`.
-
-Then update the version table here and in `www/vendor/README.md`, and the paths in `app.py` and `mermaid-binding.js` if the file names changed.
+Then update the version table here and in `www/vendor/README.md`.
 
 ::: {.callout-warning}
-Mermaid and the ELK plugin must be upgraded together. `layout-elk` 0.2.3 fails on Mermaid 11.4.1 with `Ge.default.extend is not a function`; 0.1.7 was released alongside 11.4.1 and works. `tests/test_layout.py` catches a mismatch.
+Since Mermaid 12, `mermaid.min.js` includes the ELK layout, so the app no longer vendors `@mermaid-js/layout-elk`. Do not go back to a Mermaid 11 release without restoring that plugin; `tests/test_layout.py` fails if ELK stops drawing. Mermaid 12 needs ES2024 browsers (Safari 17.4 or later).
 :::
-
-The browser loads the ELK files as ES modules, which must be served as JavaScript. Older Python versions on some systems don't know the `.mjs` extension, so `app.py` registers it with `mimetypes` before the app starts.
 
 ## Build the docs
 

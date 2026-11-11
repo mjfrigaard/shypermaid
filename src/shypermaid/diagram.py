@@ -165,8 +165,8 @@ def render_config(theme: str, look: str, layout: str = "dagre") -> dict[str, Any
     look
         A key of ``LOOKS``.
     layout
-        A key of ``LAYOUTS``. ``"elk"`` makes the browser load the
-        ``@mermaid-js/layout-elk`` plugin the first time it is used.
+        A key of ``LAYOUTS``. Mermaid 12 includes the ELK layout, so
+        ``"elk"`` needs no plugin.
 
     Returns
     -------

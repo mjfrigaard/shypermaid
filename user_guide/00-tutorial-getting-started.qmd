@@ -25,7 +25,7 @@ The install adds a `shypermaid` command to the environment. Run it with `uv`:
 uv run shypermaid
 ```
 
-The command starts a server on `127.0.0.1:8000` and opens the app in a browser. The app ships its own copies of Mermaid, svg-pan-zoom, and the ELK layout plugin, so it works without an internet connection.
+The command starts a server on `127.0.0.1:8000` and opens the app in a browser. The app ships its own copies of Mermaid and svg-pan-zoom, so it works without an internet connection. Mermaid 12 needs a current browser (Safari 17.4 or later, or a recent Chrome, Edge, or Firefox).
 
 We can confirm the app is working by looking at the canvas. The sample flowchart from the editor should be drawn on the right side of the page.
 
@@ -52,7 +52,7 @@ Turn off Auto-Update when you're writing a long diagram. The canvas only redraws
 
 ## Change how it looks
 
-The menus at the top right of the canvas change the drawing without changing your code. Theme picks the color scheme, and Look switches between the classic style and a hand drawn style. Layout picks the engine that places the nodes: Dagre is the default, and ELK draws right angled edges and often untangles diagrams with many crossing links. The first time you pick ELK, the app downloads the layout plugin, so the redraw takes a moment.
+The menus at the top right of the canvas change the drawing without changing your code. Theme picks the color scheme, and Look switches between the classic style and a hand drawn style. Layout picks the engine that places the nodes: Dagre is the default, and ELK draws right angled edges and often untangles diagrams with many crossing links.
 
 Direction rewrites your code's direction before it is drawn. Pick Left to right and the flowchart turns on its side. Pick As written to go back to the direction in your code.
 
