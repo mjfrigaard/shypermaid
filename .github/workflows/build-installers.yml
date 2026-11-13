@@ -43,7 +43,7 @@ jobs:
         if: matrix.platform == 'linux'
         working-directory: ${{ steps.electron.outputs.electron-app-path }}
         run: |
-          npm pkg set homepage=https://github.com/mjfrigaard/shypermaid
+          npm pkg set homepage=https://mjfrigaard.github.io/shypermaid/
           npx electron-builder --linux deb --x64 --publish never \
             --prepackaged dist/linux-unpacked \
             -c.linux.maintainer="Martin Frigaard <mjfrigaard@pm.me>" \
