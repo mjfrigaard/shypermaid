@@ -120,6 +120,10 @@
 .sm-stage svg {
   max-width: none !important;
 }
+/* Bootstrap sets <code> to a fixed dark color; follow the theme's label color */
+.sm-stage foreignObject code {
+  color: inherit;
+}
 .sm-error {
   position: absolute;
   left: 1rem;
