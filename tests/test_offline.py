@@ -39,4 +39,3 @@ def test_elk_loads_without_network(offline):
     expect(page.locator(".sm-stage svg")).not_to_have_id(before, timeout=20000)
     expect(page.locator(".sm-error")).to_be_hidden()
     assert external == []
-
