@@ -20,6 +20,17 @@ def test_ui_contains_modules():
         assert f'id="{id_}"' in html
 
 
+def test_tools_are_labeled_icons():
+    import re
+
+    html = str(app_ui())
+    tools = re.findall(r'<button[^>]*class="sm-tool"[^>]*>.*?</button>', html, re.S)
+    assert len(tools) == 7
+    for tool in tools:
+        assert "<svg" in tool
+        assert re.search(r'aria-label="[^"]+"', tool)
+
+
 def test_static_assets_exist():
     assert (WWW / "mermaid-binding.js").is_file()
     assert (WWW / "styles.css").is_file()

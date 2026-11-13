@@ -21,7 +21,7 @@ def viewer(page: Page, app) -> Page:
 
 def download(page: Page, label: str) -> tuple[bytes, str]:
     with page.expect_download() as info:
-        page.locator(".sm-tool", has_text=label).click()
+        page.get_by_role("button", name=f"Download {label}").click()
     return info.value.path().read_bytes(), info.value.suggested_filename
 
 

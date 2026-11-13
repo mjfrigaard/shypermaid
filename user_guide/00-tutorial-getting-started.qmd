@@ -72,16 +72,16 @@ Direction works on four diagram types, and each one sets it in its own way:
 
 The tool buttons on the right edge control the view. You can also drag the canvas to pan and use the scroll wheel to zoom.
 
-| Button | Action |
+| Button (tooltip) | Action |
 |---|---|
-| `+` and `−` | Zoom in and out |
-| `1:1` | Show the diagram at its actual size |
-| `Fit` | Fit the whole diagram on the canvas |
-| `⛶` | Enter or leave fullscreen |
-| `SVG` | Download the diagram as `diagram.svg` |
-| `PNG` | Download the diagram as `diagram.png` at twice its size |
+| Zoom in and Zoom out | Zoom in and out |
+| Actual size | Show the diagram at its actual size |
+| Fit | Fit the whole diagram on the canvas |
+| Fullscreen | Enter or leave fullscreen |
+| Download SVG | Download the diagram as `diagram.svg` |
+| Download PNG | Download the diagram as `diagram.png` at twice its size |
 
-Click SVG to save the diagram. The file holds the diagram as Mermaid drew it, without the pan and zoom applied. Click PNG for an image you can paste into slides or documents; it has a white background (dark gray with the Dark theme).
+Hover over a button to see its name. Click Download SVG to save the diagram. The file holds the diagram as Mermaid drew it, without the pan and zoom applied. Click Download PNG for an image you can paste into slides or documents; it has a white background (dark gray with the Dark theme).
 
 ## Recap
 

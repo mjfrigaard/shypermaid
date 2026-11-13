@@ -8,7 +8,10 @@ version = "0.2.0"
 description = "Shiny for Python app-package that renders Mermaid diagrams"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["shiny>=1.2.0"]
+dependencies = [
+    "faicons>=0.2.2",
+    "shiny>=1.2.0",
+]
 
 [dependency-groups]
 dev = [

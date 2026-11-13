@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from faicons import icon_svg
 from shiny import Inputs, Outputs, Session, module, reactive, render, ui
 from shiny.module import resolve_id
 
@@ -33,7 +34,7 @@ def editor_ui() -> ui.Tag:
     """
     return ui.div(
         ui.div(
-            ui.span("</> Code", class_="sm-title"),
+            ui.span(icon_svg("code"), " Code", class_="sm-title"),
             ui.input_switch("auto", "Auto-Update", value=True),
             ui.panel_conditional(
                 "!input.auto",
@@ -94,12 +95,13 @@ def editor_server(
     return committed
 
 
-def _tool(action: str, label: str, target: str) -> ui.Tag:
+def _tool(action: str, icon: str, label: str, target: str) -> ui.Tag:
     return ui.tags.button(
-        label,
+        icon_svg(icon),
         type="button",
         class_="sm-tool",
-        title=action.replace("-", " ").title(),
+        title=label,
+        aria_label=label,
         **{"data-sm-action": action, "data-sm-target": target},
     )
 
@@ -132,13 +134,13 @@ def viewer_ui() -> ui.Tag:
             class_="sm-canvas",
         ),
         ui.div(
-            _tool("zoom-in", "+", canvas),
-            _tool("zoom-out", "−", canvas),
-            _tool("actual-size", "1:1", canvas),
-            _tool("fit", "Fit", canvas),
-            _tool("fullscreen", "⛶", canvas),
-            _tool("download-svg", "SVG", canvas),
-            _tool("download-png", "PNG", canvas),
+            _tool("zoom-in", "magnifying-glass-plus", "Zoom in", canvas),
+            _tool("zoom-out", "magnifying-glass-minus", "Zoom out", canvas),
+            _tool("actual-size", "magnifying-glass", "Actual size", canvas),
+            _tool("fit", "compress", "Fit", canvas),
+            _tool("fullscreen", "expand", "Fullscreen", canvas),
+            _tool("download-svg", "file-code", "Download SVG", canvas),
+            _tool("download-png", "file-image", "Download PNG", canvas),
             class_="sm-tools",
         ),
         class_="sm-viewer",
