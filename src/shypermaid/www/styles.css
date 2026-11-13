@@ -189,3 +189,15 @@
 .sm-code > .shiny-input-container > textarea {
   min-height: 100%;
 }
+.sm-toolbar .shiny-text-output {
+  align-self: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  background: var(--sm-panel);
+  color: var(--sm-ink);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.sm-toolbar .shiny-text-output:empty {
+  display: none;
+}

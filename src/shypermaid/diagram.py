@@ -155,6 +155,55 @@ def set_direction(code: str, direction: str) -> str:
     return "".join(lines)
 
 
+_KEY = re.compile(
+    r"^(?P<indent>[ \t]*)(?P<key>[\w-]+)[ \t]*:[ \t]*(?P<value>.*?)[ \t]*$"
+)
+
+
+def code_theme(code: str) -> str | None:
+    """Return the theme set by the code's frontmatter ``config: theme:``.
+
+    Mermaid applies this theme over the one passed to
+    ``mermaid.initialize()``, so the Theme menu has no effect.
+
+    Parameters
+    ----------
+    code
+        Mermaid source.
+
+    Returns
+    -------
+    str or None
+        The theme name, or ``None`` when the frontmatter sets no theme.
+
+    Examples
+    --------
+    >>> code_theme("---\\nconfig:\\n  theme: dark\\n---\\nflowchart TD")
+    'dark'
+    """
+    lines = code.lstrip("\n").splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None
+    config: int | None = None
+    for line in lines[1:]:
+        if line.strip() == "---":
+            break
+        m = _KEY.match(line)
+        if not m:
+            continue
+        depth = len(m["indent"])
+        if config is None:
+            if depth == 0 and m["key"] == "config":
+                config = 0
+        elif depth == 0:
+            config = None
+        elif config == 0 or depth == config:
+            config = depth
+            if m["key"] == "theme" and m["value"]:
+                return m["value"].strip("\"'")
+    return None
+
+
 def render_config(theme: str, look: str, layout: str = "dagre") -> dict[str, Any]:
     """Build the options passed to ``mermaid.initialize()``.
 

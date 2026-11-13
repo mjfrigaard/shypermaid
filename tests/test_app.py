@@ -43,3 +43,10 @@ def test_viewer_has_download_buttons():
     html = str(app_ui())
     for action in ("download-svg", "download-png"):
         assert f'data-sm-action="{action}"' in html
+
+
+def test_render_button_hidden_while_auto_update_on():
+    html = str(app_ui())
+    assert 'data-display-if="!input.auto"' in html
+    assert 'data-ns-prefix="editor-"' in html
+    assert 'id="viewer-theme_note"' in html

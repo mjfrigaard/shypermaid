@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from shiny import Inputs, Outputs, Session, module, reactive, ui
+from shiny import Inputs, Outputs, Session, module, reactive, render, ui
 from shiny.module import resolve_id
 
 from .diagram import (
@@ -12,6 +12,7 @@ from .diagram import (
     LAYOUTS,
     LOOKS,
     THEMES,
+    code_theme,
     render_config,
     set_direction,
 )
@@ -20,6 +21,8 @@ from .diagram import (
 @module.ui
 def editor_ui() -> ui.Tag:
     """Code editor with an Auto-Update switch and a Render button.
+
+    The Render button shows only while Auto-Update is off.
 
     Call with a module id, as in ``editor_ui("editor")``.
 
@@ -32,7 +35,10 @@ def editor_ui() -> ui.Tag:
         ui.div(
             ui.span("</> Code", class_="sm-title"),
             ui.input_switch("auto", "Auto-Update", value=True),
-            ui.input_action_button("render", "Render", class_="btn-sm"),
+            ui.panel_conditional(
+                "!input.auto",
+                ui.input_action_button("render", "Render", class_="btn-sm"),
+            ),
             ui.a("Docs", href=DOCS_URL, target="_blank", class_="sm-docs"),
             class_="sm-editor-header",
         ),
@@ -112,6 +118,7 @@ def viewer_ui() -> ui.Tag:
     canvas = resolve_id("canvas")
     return ui.div(
         ui.div(
+            ui.output_text("theme_note", inline=True),
             ui.input_select("theme", None, THEMES, width="auto"),
             ui.input_select("look", None, LOOKS, width="auto"),
             ui.input_select("layout", None, LAYOUTS, width="auto"),
@@ -153,6 +160,13 @@ def viewer_server(
         Mermaid code to draw, usually the value returned by
         `editor_server()`.
     """
+
+    # The note is empty (hidden) most of the time; keep it updating anyway.
+    @output(suspend_when_hidden=False)
+    @render.text
+    def theme_note() -> str:
+        theme = code_theme(code())
+        return f"Theme set in code: {theme}" if theme else ""
 
     @reactive.effect
     async def _render() -> None:

@@ -1,6 +1,6 @@
 import pytest
 
-from shypermaid.diagram import DEFAULT_CODE, render_config, set_direction
+from shypermaid.diagram import DEFAULT_CODE, code_theme, render_config, set_direction
 
 
 def test_set_direction_replaces_existing():
@@ -128,3 +128,40 @@ def test_set_direction_gitgraph(code, direction, expected):
 )
 def test_set_direction_unsupported_unchanged(code):
     assert set_direction(code, "LR") == code
+
+
+FRONTMATTER = """\
+---
+title: Demo
+config:
+  theme: forest
+  themeVariables:
+    primaryColor: "#fff"
+---
+flowchart TD
+  a --> b
+"""
+
+
+def test_code_theme_reads_frontmatter():
+    assert code_theme(FRONTMATTER) == "forest"
+
+
+@pytest.mark.parametrize(
+    "code",
+    [
+        "flowchart TD\n  a --> b",
+        "---\ntitle: Demo\n---\nflowchart TD",
+        "---\nconfig:\n  look: handDrawn\n---\nflowchart TD",
+        "---\ntheme: dark\n---\nflowchart TD",
+        "---\nconfig:\n  flowchart:\n    theme: dark\n---\nflowchart TD",
+        "flowchart TD\n  theme: dark",
+        "---\nconfig:\n  themeVariables:\n    x: 1\n---\nflowchart TD",
+    ],
+)
+def test_code_theme_none(code):
+    assert code_theme(code) is None
+
+
+def test_code_theme_quoted_and_leading_blank_lines():
+    assert code_theme("\n---\nconfig:\n    theme: 'dark'\n---\nflowchart TD") == "dark"

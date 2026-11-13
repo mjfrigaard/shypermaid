@@ -140,3 +140,17 @@ def test_unknown_menu_value_is_an_error(app: App):
 def test_app_server_wires_modules():
     with started(create_app()) as ts:
         assert ts.is_ok
+
+
+@in_thread
+def test_theme_note_empty_without_frontmatter_theme(app: App):
+    with started(app.server) as ts:
+        assert ts.make_scope("viewer").get_output("theme_note") == ""
+
+
+@in_thread
+def test_theme_note_shows_frontmatter_theme(app: App):
+    with started(app.server) as ts:
+        editor(ts, code="---\nconfig:\n  theme: forest\n---\nflowchart TD")
+        note = ts.make_scope("viewer").get_output("theme_note")
+        assert note == "Theme set in code: forest"
