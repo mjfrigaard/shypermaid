@@ -29,11 +29,30 @@ jobs:
         shell: bash
 
       - uses: coatless-actions/shiny-to-electron@v1
+        id: electron
         with:
           appdir: electron/app
           app-name: shypermaid
           platform: ${{ matrix.platform }}
           arch: ${{ matrix.arch }}
+
+      # shinyelectron only targets AppImage on Linux; repackage the same
+      # unpacked app as a .deb with the electron-builder it installed
+      - name: Build .deb
+        if: matrix.platform == 'linux'
+        working-directory: ${{ steps.electron.outputs.electron-app-path }}
+        run: >
+          npx electron-builder --linux deb --x64 --publish never
+          --prepackaged dist/linux-unpacked
+          -c.linux.maintainer="Martin Frigaard"
+          -c.deb.artifactName='${name}_${version}_amd64.${ext}'
+        shell: bash
+      - if: matrix.platform == 'linux'
+        uses: actions/upload-artifact@v7
+        with:
+          name: shypermaid-linux-x64-deb
+          path: ${{ steps.electron.outputs.dist-path }}/*.deb
+          if-no-files-found: error
 
   release:
     name: "Release"
