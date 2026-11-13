@@ -44,7 +44,7 @@ jobs:
         run: >
           npx electron-builder --linux deb --x64 --publish never
           --prepackaged dist/linux-unpacked
-          -c.linux.maintainer="Martin Frigaard"
+          -c.linux.maintainer="Martin Frigaard <mjfrigaard@pm.me>"
           -c.deb.artifactName='${name}_${version}_amd64.${ext}'
         shell: bash
       - if: matrix.platform == 'linux'
