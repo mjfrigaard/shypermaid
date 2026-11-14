@@ -38,15 +38,18 @@ jobs:
 
       # shinyelectron only targets AppImage on Linux; repackage the same
       # unpacked app as a .deb with the electron-builder it installed.
-      # A .deb needs a homepage and a maintainer.
+      # A .deb needs a homepage and a maintainer; the description comes
+      # from the README.
       - name: Build .deb
         if: matrix.platform == 'linux'
         working-directory: ${{ steps.electron.outputs.electron-app-path }}
         run: |
           npm pkg set homepage=https://mjfrigaard.github.io/shypermaid/
+          npm pkg set description="A Shiny for Python (Core) app-package that renders Mermaid diagrams. Write Mermaid code in the left pane and the diagram updates on the canvas to the right."
           npx electron-builder --linux deb --x64 --publish never \
             --prepackaged dist/linux-unpacked \
             -c.linux.maintainer="Martin Frigaard <mjfrigaard@pm.me>" \
+            -c.linux.synopsis="A Shiny for Python (Core) app-package that renders Mermaid diagrams" \
             -c.deb.artifactName='${name}_${version}_amd64.${ext}'
         shell: bash
       - if: matrix.platform == 'linux'
