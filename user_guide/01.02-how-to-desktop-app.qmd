@@ -7,13 +7,19 @@ shypermaid also runs as a desktop app: a window of its own, no terminal, and no 
 
 ## Install a release
 
-Each release on GitHub has one installer per operating system. Download the file for yours:
+Each [release on GitHub](https://github.com/mjfrigaard/shypermaid/releases/latest) has one installer per operating system. Download the file for yours:
 
 | System | File |
 |---|---|
 | macOS (Apple silicon or Intel) | `.dmg` |
 | Windows | `.exe` |
-| Linux | `.AppImage` |
+| Linux | `.AppImage` or `.deb` (Debian, Ubuntu, Pop!_OS) |
+
+Install the `.deb` with apt, which also adds shypermaid to the app menu and a `shypermaid` command:
+
+```bash
+sudo apt install ./shypermaid_0.2.0_amd64.deb
+```
 
 The installers ship their own copy of Python, so you don't need Python, R, or Node installed. The app opens in its own window with the same editor and canvas as the browser version, with two differences:
 
@@ -23,6 +29,17 @@ The installers ship their own copy of Python, so you don't need Python, R, or No
 ::: {.callout-note}
 The installers are not signed yet, so the operating system warns you the first time you open the app. On macOS, right click the app and choose Open (or click Open Anyway under System Settings, Privacy & Security). On Windows, click More info, then Run anyway. On Linux, make the file executable with `chmod +x` and run it.
 :::
+
+## Remove the app
+
+The app keeps its settings and cache in a folder of its own, and removing the app leaves that folder in place. Remove both:
+
+| System | Remove the app | Remove the settings |
+|---|---|---|
+| macOS | Drag `shypermaid` from Applications to the Trash | `rm -rf ~/Library/Application\ Support/shypermaid` |
+| Windows | Settings, Apps, Installed apps, shypermaid, Uninstall | `Remove-Item -Recurse "$env:APPDATA\shypermaid"` |
+| Linux (`.deb`) | `sudo apt remove shypermaid` | `rm -rf ~/.config/shypermaid` |
+| Linux (`.AppImage`) | Delete the `.AppImage` file | `rm -rf ~/.config/shypermaid` |
 
 ## How the build works
 
@@ -91,7 +108,7 @@ A build only makes installers for the system it runs on. macOS installers need a
 
 ## Publish installers for every system
 
-`.github/workflows/build-installers.yml` builds all four installers (macOS Apple silicon, macOS Intel, Windows, and Linux) on GitHub's runners. It runs when you push a version tag, and attaches the installers to a GitHub release for that tag:
+`.github/workflows/build-installers.yml` builds all four installers (macOS Apple silicon, macOS Intel, Windows, and Linux) on GitHub's runners. The Linux job also repackages the app as a `.deb`. It runs when you push a version tag, and attaches the installers to a GitHub release for that tag:
 
 ```bash
 git tag v0.2.0
