@@ -182,6 +182,10 @@ site_url: "https://mjfrigaard.github.io/shypermaid/"
 #     orcid: 0000-0002-1234-5678
 #     image: https://github.com/yourusername.png  # Avatar (GitHub URL or local path)
 # authors: []
+authors:
+  - name: "Martin Frigaard"
+    email: mjfrigaard@pm.me
+    github: mjfrigaard
 
 # Funding
 # -------
