@@ -1,0 +1,67 @@
+name: Smoke Test Installers
+
+# Downloads a release's installers, installs them on macOS and Windows,
+# and runs tools/smoke_installer.py against the installed app.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to test (e.g. v0.2.1)"
+        required: true
+
+jobs:
+  smoke:
+    name: "Smoke ${{ matrix.name }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: mac-arm64, os: macos-latest,   pattern: "*-arm64.dmg" }
+          - { name: mac-x64,   os: macos-15-intel, pattern: "*-x64.dmg" }
+          - { name: win-x64,   os: windows-latest, pattern: "*Setup*.exe" }
+    runs-on: ${{ matrix.os }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      # Playwright only connects to the app's Electron, so no browser download
+      - run: pip install playwright
+
+      - name: Download installer
+        run: gh release download "${{ inputs.tag }}" --pattern "${{ matrix.pattern }}" --dir installer
+        shell: bash
+
+      - name: Install (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          hdiutil attach installer/*.dmg -nobrowse -mountpoint /Volumes/shypermaid
+          cp -R /Volumes/shypermaid/shypermaid.app /Applications/
+          hdiutil detach /Volumes/shypermaid
+          echo "APP_BIN=/Applications/shypermaid.app/Contents/MacOS/shypermaid" >> "$GITHUB_ENV"
+          echo "APP_SETTINGS=$HOME/Library/Application Support/shypermaid" >> "$GITHUB_ENV"
+
+      - name: Install (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem installer/*.exe | Select-Object -First 1
+          Start-Process $exe.FullName -ArgumentList '/S' -Wait
+          $bin = Get-ChildItem "$env:LOCALAPPDATA\Programs" -Recurse -Filter shypermaid.exe |
+            Select-Object -First 1
+          if (-not $bin) { throw "shypermaid.exe not found after install" }
+          "APP_BIN=$($bin.FullName)" >> $env:GITHUB_ENV
+          "APP_SETTINGS=$env:APPDATA\shypermaid" >> $env:GITHUB_ENV
+
+      - name: Smoke test
+        run: python tools/smoke_installer.py "$APP_BIN" "$APP_SETTINGS" smoke-${{ matrix.name }}.png
+        shell: bash
+
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: smoke-${{ matrix.name }}
+          path: smoke-${{ matrix.name }}.png
+          if-no-files-found: ignore
