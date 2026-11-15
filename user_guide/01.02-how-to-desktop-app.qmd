@@ -3,7 +3,7 @@ title: "Build the Desktop App"
 guide-section: "How-To"
 ---
 
-shypermaid also runs as a desktop app: a window of its own, no terminal, and no internet connection. The installers are built with [shinyelectron](https://r-pkg.thecoatlessprofessor.com/shinyelectron/), an R package that wraps a Shiny app in Electron. This guide shows how to install a release, build an installer on your own machine, and publish installers for every operating system.
+`shypermaid` also runs as a desktop app: a window of its own, no terminal, and no internet connection. The installers are built with [shinyelectron](https://r-pkg.thecoatlessprofessor.com/shinyelectron/), an R package that wraps a Shiny app in Electron. This guide shows how to install a release, build an installer on your own machine, and publish installers for every operating system.
 
 ## Install a release
 
@@ -15,7 +15,7 @@ Each [release on GitHub](https://github.com/mjfrigaard/shypermaid/releases/lates
 | Windows | `.exe` |
 | Linux | `.AppImage` or `.deb` (Debian, Ubuntu, Pop!_OS) |
 
-Install the `.deb` with apt, which also adds shypermaid to the app menu and a `shypermaid` command:
+Install the `.deb` with apt, which also adds `shypermaid` to the app menu and a `shypermaid` command:
 
 ```bash
 sudo apt install ./shypermaid_0.2.1_amd64.deb
@@ -37,7 +37,7 @@ The app keeps its settings and cache in a folder of its own, and removing the ap
 | System | Remove the app | Remove the settings |
 |---|---|---|
 | macOS | Drag `shypermaid` from Applications to the Trash | `rm -rf ~/Library/Application\ Support/shypermaid` |
-| Windows | Settings, Apps, Installed apps, shypermaid, Uninstall | `Remove-Item -Recurse "$env:APPDATA\shypermaid"` |
+| Windows | Settings, Apps, Installed apps, `shypermaid`, Uninstall | `Remove-Item -Recurse "$env:APPDATA\shypermaid"` |
 | Linux (`.deb`) | `sudo apt remove shypermaid` | `rm -rf ~/.config/shypermaid` |
 | Linux (`.AppImage`) | Delete the `.AppImage` file | `rm -rf ~/.config/shypermaid` |
 

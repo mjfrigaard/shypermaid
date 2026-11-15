@@ -1,4 +1,4 @@
-# shypermaid
+# `shypermaid`
 
 A Shiny for Python (Core) app-package that renders Mermaid diagrams. Write Mermaid code in the left pane and the diagram updates on the canvas to the right.
 
@@ -46,15 +46,15 @@ The app ships its own copies of Mermaid and svg-pan-zoom, so it works without an
 
 ## Desktop app
 
-shypermaid also ships as a desktop app built with [shinyelectron](https://r-pkg.thecoatlessprofessor.com/shinyelectron/). The installers carry their own Python, so nothing else needs to be installed. Download the one for your system from the [latest release](https://github.com/mjfrigaard/shypermaid/releases/latest):
+`shypermaid` also ships as a desktop app built with [shinyelectron](https://r-pkg.thecoatlessprofessor.com/shinyelectron/). The installers carry their own Python, so nothing else needs to be installed. Download the one for your system from the [latest release](https://github.com/mjfrigaard/shypermaid/releases/latest):
 
 | System | Installer |
 |---|---|
-| macOS (Apple silicon) | [shypermaid-0.2.1-arm64.dmg](https://github.com/mjfrigaard/shypermaid/releases/download/v0.2.1/shypermaid-0.2.1-arm64.dmg) |
-| macOS (Intel) | [shypermaid-0.2.1-x64.dmg](https://github.com/mjfrigaard/shypermaid/releases/download/v0.2.1/shypermaid-0.2.1-x64.dmg) |
-| Windows | [shypermaid-Setup-0.2.1-x64.exe](https://github.com/mjfrigaard/shypermaid/releases/download/v0.2.1/shypermaid-Setup-0.2.1-x64.exe) |
-| Linux (any) | [shypermaid-0.2.1-x86_64.AppImage](https://github.com/mjfrigaard/shypermaid/releases/download/v0.2.1/shypermaid-0.2.1-x86_64.AppImage) |
-| Linux (Debian, Ubuntu) | [shypermaid_0.2.1_amd64.deb](https://github.com/mjfrigaard/shypermaid/releases/download/v0.2.1/shypermaid_0.2.1_amd64.deb) |
+| macOS (Apple silicon) | [`shypermaid-0.2.1-arm64.dmg`](https://github.com/mjfrigaard/shypermaid/releases/download/v0.2.1/shypermaid-0.2.1-arm64.dmg) |
+| macOS (Intel) | [`shypermaid-0.2.1-x64.dmg`](https://github.com/mjfrigaard/shypermaid/releases/download/v0.2.1/shypermaid-0.2.1-x64.dmg) |
+| Windows | [`shypermaid-Setup-0.2.1-x64.exe`](https://github.com/mjfrigaard/shypermaid/releases/download/v0.2.1/shypermaid-Setup-0.2.1-x64.exe) |
+| Linux (any) | [`shypermaid-0.2.1-x86_64.AppImage`](https://github.com/mjfrigaard/shypermaid/releases/download/v0.2.1/shypermaid-0.2.1-x86_64.AppImage) |
+| Linux (Debian, Ubuntu) | [`shypermaid_0.2.1_amd64.deb`](https://github.com/mjfrigaard/shypermaid/releases/download/v0.2.1/shypermaid_0.2.1_amd64.deb) |
 
 The installers are not signed yet, so your system warns you the first time you open the app. See [Build the Desktop App](https://mjfrigaard.github.io/shypermaid/user-guide/01.02-how-to-desktop-app.html) for how to open it anyway, how to remove the app and its settings, and how to build an installer yourself.
 
