@@ -141,12 +141,22 @@
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
+  left: 0.75rem;
   z-index: 2;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 0.5rem;
+  /* The bar spans the canvas; only its menus take clicks, so panning still works */
+  pointer-events: none;
+}
+.sm-toolbar > * {
+  pointer-events: auto;
 }
 .sm-toolbar .form-group {
   margin: 0;
+  /* Wrap to a new row instead of shrinking and cutting off the label */
+  flex: none;
 }
 .sm-toolbar select {
   background-color: var(--sm-panel);
