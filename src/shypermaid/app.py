@@ -32,7 +32,7 @@ def app_ui() -> ui.Tag:
             ui.tags.script(src="shypermaid/mermaid-binding.js"),
         ),
         ui.layout_sidebar(
-            ui.sidebar(editor_ui("editor"), width=560, padding=0),
+            ui.sidebar(editor_ui("editor"), width="min(560px, 45vw)", padding=0),
             viewer_ui("viewer"),
             border=False,
             border_radius=False,

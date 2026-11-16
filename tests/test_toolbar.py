@@ -16,7 +16,7 @@ def overlaps(a: dict, b: dict) -> bool:
     )
 
 
-@pytest.mark.parametrize("size", [(1024, 650), (1400, 780)])
+@pytest.mark.parametrize("size", [(800, 600), (1024, 650), (1400, 780)])
 def test_toolbar_menus_fit(page: Page, app, size):
     page.set_viewport_size({"width": size[0], "height": size[1]})
     page.goto(app.url)
