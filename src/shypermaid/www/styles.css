@@ -111,6 +111,14 @@
   background-image: radial-gradient(var(--sm-dot) 1px, transparent 1px);
   background-size: 22px 22px;
 }
+/* Below bslib's 576px breakpoint the main area sizes to its content,
+   and the viewer's content is all absolutely positioned, so it would
+   collapse to 0 px tall. */
+@media (max-width: 575.98px) {
+  .sm-viewer {
+    min-height: 100vh;
+  }
+}
 .sm-canvas,
 .sm-stage {
   position: absolute;

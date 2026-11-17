@@ -4,8 +4,20 @@
   var state = {}; // canvas id -> { pz, raw }
   var seq = 0;
 
+  // svg-pan-zoom throws ("matrix is not invertible") on an SVG with no
+  // width or height, e.g. a canvas squeezed to 0 px in a narrow window.
+  // Start it on the first fit with room; the ResizeObserver calls fit.
   function fit(s) {
     if (!s) return;
+    var r = s.svg.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0) return;
+    if (!s.pz) {
+      s.pz = window.svgPanZoom(s.svg, {
+        minZoom: 0.1,
+        maxZoom: 20,
+        zoomScaleSensitivity: 0.3,
+      });
+    }
     s.pz.resize();
     s.pz.fit();
     s.pz.center();
@@ -20,7 +32,7 @@
       window.mermaid.initialize(msg.config);
       await window.mermaid.parse(msg.code);
       var out = await window.mermaid.render("sm-svg-" + ++seq, msg.code);
-      if (state[msg.id]) state[msg.id].pz.destroy();
+      if (state[msg.id] && state[msg.id].pz) state[msg.id].pz.destroy();
       stage.innerHTML = out.svg;
       var svg = stage.querySelector("svg");
       svg.removeAttribute("style");
@@ -30,14 +42,9 @@
         raw: out.svg,
         svg: svg,
         theme: msg.config.theme,
-        pz: window.svgPanZoom(svg, {
-          fit: true,
-          center: true,
-          minZoom: 0.1,
-          maxZoom: 20,
-          zoomScaleSensitivity: 0.3,
-        }),
+        pz: null,
       };
+      fit(state[msg.id]);
       err.hidden = true;
       err.textContent = "";
     } catch (e) {
@@ -115,13 +122,13 @@
     var s = state[id];
     switch (btn.dataset.smAction) {
       case "zoom-in":
-        if (s) s.pz.zoomIn();
+        if (s && s.pz) s.pz.zoomIn();
         break;
       case "zoom-out":
-        if (s) s.pz.zoomOut();
+        if (s && s.pz) s.pz.zoomOut();
         break;
       case "actual-size":
-        if (s) {
+        if (s && s.pz) {
           s.pz.zoom(s.pz.getZoom() / s.pz.getSizes().realZoom);
           s.pz.center();
         }

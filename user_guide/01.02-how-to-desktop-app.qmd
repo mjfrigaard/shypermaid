@@ -27,7 +27,7 @@ The installers ship their own copy of Python, so you don't need Python, R, or No
 * Docs opens the Mermaid syntax reference in a second app window. That page is on the web, so it's the one part of the app that needs an internet connection.
 
 ::: {.callout-note}
-The installers are not signed yet, so the operating system warns you the first time you open the app. On macOS, right click the app and choose Open (or click Open Anyway under System Settings, Privacy & Security). On Windows, click More info, then Run anyway. On Linux, make the file executable with `chmod +x` and run it.
+The installers are not signed yet, so the operating system warns you the first time you open the app. On macOS, double click the app and click Done in the warning, then open System Settings, Privacy & Security, click Open Anyway next to the `shypermaid` message, enter your password, and click Open Anyway once more. On recent macOS versions (checked on macOS 26), right click and Open shows the same warning without an Open button. On Windows, click More info, then Run anyway. On Linux, make the file executable with `chmod +x` and run it.
 :::
 
 ## Remove the app
