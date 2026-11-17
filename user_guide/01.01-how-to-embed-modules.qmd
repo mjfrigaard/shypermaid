@@ -27,12 +27,12 @@ flowchart TD
     esrv --> code --> vsrv
     vui -.-> vsrv
 
-    style UI fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
-    style Server fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
-    style eui fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
-    style vui fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
-    style esrv fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
-    style vsrv fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style UI fill:#FFFFFF,color:#1B2A41,stroke:#1B2A41,stroke-width:1px,rx:10,ry:10
+    style Server fill:#FFFFFF,color:#1B2A41,stroke:#1B2A41,stroke-width:1px,rx:10,ry:10
+    style eui fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
+    style vui fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
+    style esrv fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
+    style vsrv fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
 ```
 
 The dotted lines pair each UI function with its server function through a shared id. The solid line is the only data that crosses between the modules.

@@ -38,15 +38,15 @@ flowchart TD
     viewer --> dir & cfg
     editor & viewer --> consts
 
-    style App fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
-    style Modules fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
-    style Diagram fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
-    style run fill:#4CBB9D,color:#FFFFFF
-    style create fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
-    style appui fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
-    style srv fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
-    style editor fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
-    style viewer fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
+    style App fill:#FFFFFF,color:#1B2A41,stroke:#1B2A41,stroke-width:1px,rx:10,ry:10
+    style Modules fill:#FFFFFF,color:#1B2A41,stroke:#1B2A41,stroke-width:1px,rx:10,ry:10
+    style Diagram fill:#FFFFFF,color:#1B2A41,stroke:#1B2A41,stroke-width:1px,rx:10,ry:10
+    style run fill:#2A6F77,color:#FFFFFF
+    style create fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
+    style appui fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
+    style srv fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
+    style editor fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
+    style viewer fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
 ```
 
 `app.py` assembles the page and launches the server. `modules.py` holds the two Shiny modules. `diagram.py` holds plain Python functions and the menu choices.

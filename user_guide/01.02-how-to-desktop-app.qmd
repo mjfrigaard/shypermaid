@@ -63,12 +63,12 @@ flowchart TD
     pkg --> scaffold --> App
     App --> export --> inst
 
-    style App fill:#FFFFFF,color:#000000,stroke:#333,stroke-width:1px,rx:10,ry:10
-    style scaffold fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
-    style export fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
-    style launcher fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
-    style yml fill:#4CBB9D,color:#FFFFFF,rx:5,ry:5
-    style inst fill:#4CBB9D,color:#FFFFFF
+    style App fill:#FFFFFF,color:#1B2A41,stroke:#1B2A41,stroke-width:1px,rx:10,ry:10
+    style scaffold fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
+    style export fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
+    style launcher fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
+    style yml fill:#2A6F77,color:#FFFFFF,rx:5,ry:5
+    style inst fill:#2A6F77,color:#FFFFFF
 ```
 
 The files in `electron/` have three jobs:
