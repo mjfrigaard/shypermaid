@@ -84,3 +84,28 @@ def test_png_dark_theme_background(viewer: Page):
     viewer.wait_for_timeout(500)
     data, _ = download(viewer, "PNG")
     assert png_pixels(viewer, data)["corner"] == [51, 51, 51, 255]
+
+
+LABELS = (
+    "flowchart TD\n"
+    '    a[/"<code>study.extract.json</code>"/] --> b[("<code>corpus.sqlite</code>")]'
+)
+
+OVERFLOW = """() => Array.from(document.querySelectorAll('foreignObject')).map(fo => {
+  const label = fo.firstElementChild;
+  return label.scrollWidth - fo.width.baseVal.value;
+})"""
+
+
+def test_svg_code_labels_fit_when_opened_alone(viewer: Page):
+    viewer.locator("textarea").fill(LABELS)
+    viewer.wait_for_function(
+        "document.querySelector('.sm-stage foreignObject code') !== null"
+    )
+    viewer.wait_for_timeout(500)
+    data, _ = download(viewer, "SVG")
+    alone = viewer.context.new_page()
+    alone.set_content(data.decode())
+    overflow = alone.evaluate(OVERFLOW)
+    assert overflow
+    assert max(overflow) <= 1

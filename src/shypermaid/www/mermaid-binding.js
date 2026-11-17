@@ -63,10 +63,6 @@
     }, 0);
   }
 
-  function download(s) {
-    save(new Blob([s.raw], { type: "image/svg+xml" }), "diagram.svg");
-  }
-
   // PNG: draw the SVG on a canvas. The image must load from a data: URL;
   // a blob: URL with HTML labels (foreignObject) taints the canvas in Chrome.
   var PNG_SCALE = 2;
@@ -88,7 +84,8 @@
     }
   }
 
-  function downloadPng(s) {
+  // A copy of the diagram that renders the same outside the app.
+  function standalone(s) {
     var box = document.createElement("div");
     box.innerHTML = s.raw; // HTML parser, then XMLSerializer gives valid XML
     var svg = box.querySelector("svg");
@@ -97,7 +94,18 @@
     svg.setAttribute("width", vb.width);
     svg.setAttribute("height", vb.height);
     svg.style.maxWidth = "none";
-    var xml = new XMLSerializer().serializeToString(svg);
+    return { xml: new XMLSerializer().serializeToString(svg), vb: vb };
+  }
+
+  function download(s) {
+    var xml = standalone(s).xml;
+    save(new Blob([xml], { type: "image/svg+xml" }), "diagram.svg");
+  }
+
+  function downloadPng(s) {
+    var copy = standalone(s);
+    var xml = copy.xml;
+    var vb = copy.vb;
     var img = new Image();
     img.onload = function () {
       var c = document.createElement("canvas");
