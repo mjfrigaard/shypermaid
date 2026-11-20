@@ -18,7 +18,7 @@ Each [release on GitHub](https://github.com/mjfrigaard/shypermaid/releases/lates
 Install the `.deb` with apt, which also adds `shypermaid` to the app menu and a `shypermaid` command:
 
 ```bash
-sudo apt install ./shypermaid_0.2.2_amd64.deb
+sudo apt install ./shypermaid_0.2.3_amd64.deb
 ```
 
 The installers ship their own copy of Python, so you don't need Python, R, or Node installed. The app opens in its own window with the same editor and canvas as the browser version, with two differences:
