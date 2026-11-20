@@ -66,6 +66,19 @@ flowchart TD
     style err fill:#B83A4B,color:#FFFFFF,rx:5,ry:5
 ```
 
+The Python side of this picture is all of `viewer_server()`. Its call tree from [`callgrove`](https://mjfrigaard.github.io/callgrove/) shows the three helpers it calls in `diagram.py`. The tree stops at the browser, because `callgrove` only reads Python files:
+
+```{python}
+from pathlib import Path
+
+import shypermaid
+from callgrove import call_tree_dir
+
+call_tree_dir(Path(shypermaid.__file__).parent, root="viewer_server")
+```
+
+`code_theme()` reads the theme set in the code's frontmatter for the note in the toolbar. It does not change what is sent to the browser.
+
 The top box runs in `viewer_server()` and the bottom box runs in `mermaid-binding.js`. The message carries three things: the namespaced canvas id, the code after `set_direction()`, and the options from `render_config()`. The id lets two viewers on one page draw into their own canvases.
 
 ## Why errors keep the last diagram

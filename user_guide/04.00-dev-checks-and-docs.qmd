@@ -63,6 +63,13 @@ The reference pages come from the numpy style docstrings in `src/shypermaid/`. A
 Diagrams on these pages must use a `{mermaid}` cell, not a plain mermaid fence. A plain fence builds with no warning but shows the Mermaid source as text.
 :::
 
+The call trees on the Package Layout and Render Cycle pages are `{python}` cells that run [`callgrove`](https://mjfrigaard.github.io/callgrove/) on every build. `callgrove` is in the `docs` group (installed from GitHub), so a changed call shows up in the next build with no manual step. Run the same calls in a console to check a refactor before you push:
+
+```python
+from callgrove import call_tree_dir
+call_tree_dir("src/shypermaid", root="create_app")
+```
+
 The build writes to `great-docs/`, which is listed in `.gitignore`.
 
 A push to `main` runs `.github/workflows/docs.yml`, which builds the site and publishes it to GitHub Pages.

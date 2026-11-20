@@ -51,6 +51,30 @@ flowchart TD
 
 `app.py` assembles the page and launches the server. `modules.py` holds the two Shiny modules. `diagram.py` holds plain Python functions and the menu choices.
 
+## The call tree from the source
+
+The diagram above is drawn by hand, so it can drift from the code. [`callgrove`](https://mjfrigaard.github.io/callgrove/) reads the source files and builds the same tree without running the app. The cell below runs on every docs build, so the tree always matches the package:
+
+```{python}
+from pathlib import Path
+
+import shypermaid
+from callgrove import call_tree_dir
+
+pkg = Path(shypermaid.__file__).parent
+call_tree_dir(pkg, root="create_app")
+```
+
+The tree starts at `create_app()`, not `run_app()`. `run_app()` passes the app to Shiny as the string `"shypermaid.app:app"`, so there is no call for `callgrove` to follow, and its tree is a single node.
+
+Each layer shows up one level below the last. `create_app()` calls `app_ui()` and `server()`, those call the modules, and only `viewer_server()` reaches into `diagram.py`. `_tool()` is a private helper that builds the buttons in the viewer's tool rail.
+
+`modules_only=True` keeps only the functions decorated with `@module.ui` or `@module.server`. The wrappers in between are removed, and the modules move up to take their place:
+
+```{python}
+call_tree_dir(pkg, root="create_app", modules_only=True)
+```
+
 ## Why the helpers are Shiny free
 
 `diagram.py` never imports `shiny`. Its two functions take strings and return a string or a dictionary, so the tests call them directly without starting a session. That's why `diagram.py` has full test coverage while the module servers do not.

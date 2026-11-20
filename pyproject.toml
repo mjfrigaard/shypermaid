@@ -21,7 +21,10 @@ dev = [
     "ruff",
     "pytest-playwright>=0.10.0",
 ]
-docs = ["great-docs; python_version >= '3.11'"]
+docs = [
+    "great-docs; python_version >= '3.11'",
+    "callgrove @ git+https://github.com/mjfrigaard/callgrove",
+]
 
 [project.scripts]
 shypermaid = "shypermaid.app:run_app"
